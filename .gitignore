@@ -11,6 +11,6 @@
 
 
 # LaTeX compiled files
-*.pdf 
+#*.pdf 
 *.ps
 *.dvi
