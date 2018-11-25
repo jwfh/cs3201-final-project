@@ -63,23 +63,15 @@ def fitness(a):
 def initialization(location):
     
     f = open(location, "r")
-    g = open("Refined_Location.txt", "w")
-    f1 = f.readlines()
-    i = 1
-    a = []
-    for x in f1:
-        if x.strip():
-            g.write("\t".join(x.split()[1:]) + "\n")
-    f.close()
-    g.close()
-    g = open("Refined_Location.txt", "r")
     
-    g1 = g.readlines()
-    for y in g1:
-        y.strip("'")
-        y.strip(",")
-        a.append(y.split(None))
-    g.close()
+    file_str = f.readlines()
+       
+    a = []
+ 
+    for line in file_str:
+        a.append(line.strip(None).split()[1:])
+
+    f.close()
     
     return a
 
