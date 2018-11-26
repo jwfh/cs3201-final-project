@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-## Crossover module
+## Fit module
 
 # Import module members
-from inver_over import *
+from fitcalc import *

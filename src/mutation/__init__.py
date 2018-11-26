@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-## Crossover module
+## Mutation module
 
 # Import module members
-from inver_over import *
+from permutation import *
+

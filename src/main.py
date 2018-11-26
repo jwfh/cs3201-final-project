@@ -1,78 +1,46 @@
+#!/usr/bin/env python3
+########################################################
+#        Course: COMP-3201                             #
+#    Assignment: Final Course Project                  #
+# Group Members: Jacob House (201614260)               # 
+#                Nabil Miri (201547429)                #
+#                Omar Mohamed (201501962)              #
+#                Hassan El-Khatib (201504396)          #
+########################################################
+
+
+## System Imports
 import random
 import math
 
-#3201 project
-#Main function
-#Initialization functions: initialization(location), candidates(a,size)
-#Fitness functions: distance(a), fitness(a)
+## Local imports
+import crossover
+import mutation
+import fit
+import population
+import selection
 
+## Begin function main
 def main():
-    data = initialization("West.txt")
-    pop_size = len(data) * 2
-    candidates_list = candidates(data, pop_size)
-    distances = []
-    for i in range(len(candidates_list)):
-        dis = distance(candidates_list[i])
-        distances.append(dis)
-
-    fitnesses = fitness(distances)
+    cities = population.initialization("West.txt")
+    len_cities = len(cities)
     
+    # It is faster in Python to add something to itself than to multiply by 2
+    pop_size = len_cities + len_cities
+    cand_size = pop_size
+    candidates = population.candidates(cities, cand_size)
 
-def candidates(a,size):
-    pop = []
-    
-    for i in range(size):
-        pop.append(random.sample(a, len(a)))
+    distances = list()
+    for i in range(cand_size):
+        distance = fit.distance(candidates[i])
+        distances.append(distance)
+    # distances is now a list (of lists of each adjacent distance for each canidate)
 
-    return pop
+    fitnesses = fit.fitness(distances)
+    # fitnesses is now a list?
 
-def distance(a):
+## End function main
 
-    dist = []
-
-    for i in range(len(a)-1):
-        x1 = float(a[i+1][0])
-        x2 = float(a[i][0]) 
-        y1 = float(a[i+1][1])
-        y2 = float(a[i][1])
-        b = ((x2 - x1)**2)
-        c = ((y2 - y1)**2)
-        dist.append(math.sqrt(b + c))
-    
-    x = (float(a[len(a)-1][0]) - float(a[0][0]))**2
-    y = (float(a[len(a)-1][1]) - float(a[0][1]))**2
-    dist.append(math.sqrt(x + y))
-
-    return dist
-
-def fitness(a):
-
-    fit = []
-
-    for i in range(len(a)):
-        avg = 0
-        summer = 0
-        for j in range(len(a[i])):
-            summer = summer + a[i][j]
-        avg = summer/len(a[i])
-        fit.append(avg)
-    
-    return fit
-
-
-def initialization(location):
-    
-    f = open(location, "r")
-    
-    file_str = f.readlines()
-       
-    a = []
- 
-    for line in file_str:
-        a.append(line.strip(None).split()[1:])
-
-    f.close()
-    
-    return a
-
-main()
+if __name__ == '__main__':
+    # If the module is the main program, not an import then run main()
+    main()
