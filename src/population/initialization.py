@@ -3,7 +3,7 @@ import os.path
 
 # Read city locations from a space-separated text file with format:
 # city_index    latitude    longitudee
-def initialization(populationFilePath: str) -> np.ndarray:
+def init_file(populationFilePath: str) -> np.ndarray:
     
     if not os.path.isfile(populationFilePath):
         raise FileNotFoundError
