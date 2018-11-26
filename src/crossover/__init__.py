@@ -3,4 +3,4 @@
 ## Crossover module
 
 # Import module members
-from inver_over import *
+from . import inver_over

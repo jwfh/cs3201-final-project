@@ -3,5 +3,5 @@
 ## Mutation module
 
 # Import module members
-from permutation import *
+# from . import permutation
 

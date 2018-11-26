@@ -1,6 +1,6 @@
 
 
-def initialization(location):
+def init_file(location: str):
     
     f = open(location, "r")
     
@@ -16,12 +16,3 @@ def initialization(location):
     return a
 
 
-    
-
-def candidates(a,size):
-    pop = []
-    
-    for i in range(size):
-        pop.append(random.sample(a, len(a)))
-
-    return pop

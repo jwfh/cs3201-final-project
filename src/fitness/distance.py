@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ## Begin function fit.distance
-def distance(cities: list) -> list:
+def adjacent_distance(cities: list) -> list:
     '''
     This function computes the distance between adjacent cities in a list `cities' passed to the function.
 

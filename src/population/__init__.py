@@ -1,3 +1,4 @@
 ## Population module
 
-from initialization import *
+from . import initialization
+from . import candidates
