@@ -15,3 +15,7 @@
 #*.pdf 
 *.ps
 #*.dvi
+
+
+# Python compiled files
+*.pyc
