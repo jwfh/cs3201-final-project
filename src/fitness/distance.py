@@ -4,7 +4,7 @@ from timing import timing
 import numpy as np
 import time
 
-## Begin function fit.distance
+## Begin function fitness.distance.adjacent_distance
 @timing
 def adjacent_distance(cities: list) -> list:
     '''
@@ -73,4 +73,4 @@ def adjacent_distance(cities: list) -> list:
         distances.append(last_square_city_distance)
 
     return distances
-## End function fit.distance
+## End function fitness.distance.adjacent_distance

@@ -2,7 +2,7 @@
 
 from timing import timing
 
-## Begin function fit.fitness
+## Begin function fitness.fitness.overall_fitness
 @timing
 def overall_fitness(cand_distances: list) -> list:
     '''
@@ -17,9 +17,9 @@ def overall_fitness(cand_distances: list) -> list:
     fitnesses = sum_dist(cand_distances)
     
     return fitnesses
-## End function fit.fitness
+## End function fitness.fitness.overall_fitness
 
-## Begin function fit.sum_dist
+## Begin function fitness.fitness.sum_dist
 def sum_dist(cand_distances: list) -> list:
     '''
     Computes the sum of distances for each sub-list representing each candidate solution.
@@ -30,4 +30,4 @@ def sum_dist(cand_distances: list) -> list:
     @return A list of sums of inter-city distancs of length equal to the number of candidates.
     '''
     return list(map(sum, cand_distances))
-## End function fit.sum_dist
+## End function fitness.fitness.sum_dist

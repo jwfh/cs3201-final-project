@@ -3,7 +3,7 @@
 ## System imports
 import numpy as np
 
-## Begin function crossover.inver_over
+## Begin function crossover.inver_over.inver_over
 def inver_over(parent: list, selected_city: int) -> list:
 	selected_city_idx = np.where(parent == selected_city)
 
@@ -20,4 +20,4 @@ def inver_over(parent: list, selected_city: int) -> list:
 	parent[selected_city_idx:c_prime_idx] = parent[selected_city_idx:c_prime_idx][::-1]
 
 	return parent
-## End function crossover.inver_over
+## End function crossover.inver_over.inver_over
