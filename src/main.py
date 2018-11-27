@@ -9,15 +9,18 @@
 #                Hassan El-Khatib (201504396)          #
 ########################################################
 
+## Local imports
 import crossover
 import mutation
 import fitness
 import population
 import selection
+from timing import timing
 
 DEBUG = 1
 
 ## Program entry point
+@timing 
 def main() -> None:
     cities = population.initialization.init_file('../data/TSP_Canada_4663.txt')
     # cities = population.initialization.init_file('../data/TSP_Uruguay_734.txt')
