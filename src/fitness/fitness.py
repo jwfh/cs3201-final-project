@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
+from timing import timing
+
 ## Begin function fit.fitness
+@timing
 def overall_fitness(cand_distances: list) -> list:
     '''
     Computes the fitness for each candidate. Currently this just means returning a list of sums.

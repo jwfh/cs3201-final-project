@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
+from timing import timing
+import numpy as np
+import time
+
 ## Begin function fit.distance
+@timing
 def adjacent_distance(cities: list) -> list:
     '''
     This function computes the distance between adjacent cities in a list `cities' passed to the function.
@@ -28,20 +33,33 @@ def adjacent_distance(cities: list) -> list:
     # Number of cities in the passed-in list; len() is O(n) not constant... let's minimize computation
     num_cities = len(cities)
 
-    # Iterate i in {0, 1, 2, ..., (num_cities-1)}
-    for i in range(num_cities):
-        x1 = cities[i+1 % num_cities][0]
+    # Experimentation revealed that accessing is much more costly than our little computation.
+    
+    x1 = cities[0][0] 
+    y1 = cities[0][1] 
+    for i in range(1, num_cities, 2):
+
         x2 = cities[i % num_cities][0]
-        y1 = cities[i+1 % num_cities][1]
         y2 = cities[i % num_cities][1]
+
         # I don't like that these are floats. Any way to make them all integers and avoid float multiplication?
-        delta_x = ((x2 - x1)**2) 
+        delta_x = ((x2 - x1)**2)
         delta_y = ((y2 - y1)**2)
-        square_city_distance = delta_x + delta_y
+        square_city_distance_1_2 = delta_x + delta_y
 
-        assert(square_city_distance >= 1, "The distance between two cities should be more than 1.")
+        x1 = cities[(i+1) % num_cities][0]
+        y1 = cities[(i+1) % num_cities][1]
 
-        distances.append(square_city_distance)
+        delta_x = ((x1 - x2)**2)
+        delta_y = ((y1 - y2)**2)
+        square_city_distance_2_3 = delta_x + delta_y
+
+        assert square_city_distance_1_2 >= 1, "The distance between two cities should be more than 1."
+        assert square_city_distance_2_3 >= 1, "The distance between two cities should be more than 1."
+        
+        distances.append(square_city_distance_1_2)
+        distances.append(square_city_distance_2_3)
+
 
     return distances
 ## End function fit.distance
