@@ -34,7 +34,9 @@ def adjacent_distance(cities: list) -> list:
     num_cities = len(cities)
 
     # Experimentation revealed that accessing is much more costly than our little computation.
-    
+    # We're initializing x1,y1 outside the loop (i-1) and only getting x2,y2 at the beginning of each 
+    # iteration (i). Then do stuff with these and reassign x1,y2 to the next thing (i+1), passing it 
+    # to the next iteration where i := i+2.
     x1 = cities[0][0] 
     y1 = cities[0][1] 
     for i in range(1, num_cities, 2):
@@ -60,6 +62,15 @@ def adjacent_distance(cities: list) -> list:
         distances.append(square_city_distance_1_2)
         distances.append(square_city_distance_2_3)
 
+    if num_cities % 2:
+        # We need ONE more computation to wrap around
+        assert x1 == cities[-1][0] and y1 == cities[-1][1], "Value of x1 and y1 are wrong."
+        x2 = cities[0][0] 
+        y2 = cities[0][1]
+        delta_x = ((x2 - x1)**2)
+        delta_y = ((y2 - y1)**2)
+        last_square_city_distance = delta_x + delta_y
+        distances.append(last_square_city_distance)
 
     return distances
 ## End function fit.distance
