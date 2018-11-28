@@ -13,8 +13,8 @@ def MPS(fitnesses: list, mating_pool_size: int) -> np.ndarray:
     # Compute division only once instead of repeating the same crap
     inverse_mating_pool_size = 1 / mating_pool_size
     
-    for i in range(1, fitnesses.size):
-        cumul_prop.append(cumul_prop[i-1] + fitness[i] / fit_sum)
+    for i in range(1, len(fitnesses)):
+        cumul_prop.append(cumul_prop[i-1] + fitnesses[i] / fit_sum)
 
     rv = random.uniform(0, inverse_mating_pool_size)
     
