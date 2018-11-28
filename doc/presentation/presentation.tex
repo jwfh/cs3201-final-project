@@ -1,0 +1,57 @@
+\documentclass[xcolor={usenames,dvipsnames,svgnames}]{beamer}
+
+\usetheme{mun}
+\usepackage{array}
+\usepackage{biblatex}
+\bibliography{\jobname}
+
+\title{GAs to Solve the TSP}
+\subtitle{Computer Science 3201}
+\author{Jacob House // Nabil Miri \\ Omar Mohammed // Hassan El-Khatib}
+\date{Fall 2018}
+
+\begin{document}
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+
+\startheads
+
+\section*{Outline}
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+\section{The Team}
+\begin{frame}
+\def\arraystretch{2}%  1 is the default, change whatever you need
+\begin{tabular}{>{\color{structure}\bfseries}ll}
+	Omar Mohamed & \parbox[t]{.75\linewidth}{Project management \\ Programmer} \\
+	Nabil Miri & \parbox[t]{.75\linewidth}{Algorithm implementation \\ Debugging} \\
+	Jacob House & \parbox[t]{.75\linewidth}{Technical management \\ Code quality control} \\
+	Hassan El-Khatib & Programmer
+\end{tabular}
+\end{frame}
+
+\section{Our Approach}
+\subsection{Population Size}
+\begin{frame}
+\begin{itemize}[<+->]
+	\item For a route with $n$ cities, we have
+	\begin{equation*}
+	R := n \cdot (n-1) \cdots 3 \cdot 2 \cdot 1 = n!
+	\end{equation*}
+	possible routes that cover all cities
+	\item As $n$ grows, so does $R$
+	\item Population size $P$ should also grow with $n$
+	\item We define $P := 2n$
+\end{itemize}
+\end{frame}
+
+
+\section{References}
+\begin{frame}[allowframebreaks]
+\nocite{*}
+\printbibliography
+\end{frame}
+\end{document}

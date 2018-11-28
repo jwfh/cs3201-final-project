@@ -1,0 +1,25 @@
+\RequirePackage{fontspec}
+\RequirePackage{hyperref}
+
+\setmainfont{AGaramondPro-Regular.otf}[
+	Ligatures=TeX,	
+	BoldFont = AGaramondPro-Bold.otf,
+	ItalicFont = AGaramondPro-Italic.otf,
+	BoldItalicFont = AGaramondPro-BoldItalic.otf
+]
+\setsansfont{Avenir-Light-07.ttf}[
+	Ligatures=TeX,	
+	BoldFont = Avenir-Heavy-05.ttf,
+	ItalicFont = Avenir-LightOblique-08.ttf,
+	BoldItalicFont = Avenir-HeavyOblique-06.ttf
+]
+
+% The branding guidelines don't actually specify a monospace font, but I think
+% this looks good with the specified fonts (and is commonly available).
+\setmonofont{Inconsolata-Regular.ttf}[
+	Ligatures=TeX,
+%	Scale = .85,
+	BoldFont= Inconsolata-Bold.ttf
+]
+
+\urlstyle{tt}

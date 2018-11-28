@@ -1,0 +1,22 @@
+\RequirePackage{hyperref}
+\RequirePackage[usenames,dvipsnames,svgnames]{xcolor}
+
+\definecolor{pms202}{cmyk}{0, 1, .61, .43}
+\definecolor{black}{cmyk}{.3, .2, .2, 1}
+\definecolor{coolGrey10}{cmyk}{.61, .53, .48, .19}
+\definecolor{coolGrey7}{cmyk}{.43, .35, .35, .01}
+\definecolor{warmGrey6}{cmyk}{.36, .35, .38, .01}
+\definecolor{warmGrey8}{cmyk}{.45, .44, .48, .07}
+
+\colorlet{MUNClaret}{pms202}
+\colorlet{MUNGrey}{coolGrey10}
+
+\newcommand{\headercolour}{\color{MUNClaret}}
+\newcommand{\neutralcolour}{\color{MUNGrey}}
+
+\newif\ifblackandwhite
+\blackandwhitefalse
+
+\hypersetup{
+  urlcolor = MUNClaret
+}

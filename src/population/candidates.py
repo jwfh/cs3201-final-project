@@ -14,5 +14,5 @@ def pick_cands(num_cities: int, num_candidates: int) -> list:
     @return Resulting values represent indices into original cities array.
     '''
 	
-	return [np.random.permutation(num_cities) for x in range(num_candidates)]
+    return [np.random.permutation(num_cities) for x in range(num_candidates)]
 ## End function population.candidates.pick_cands

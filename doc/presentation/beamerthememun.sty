@@ -1,0 +1,107 @@
+\RequirePackage{mun-fonts}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.text}
+\RequirePackage{graphbox}
+\RequirePackage{geometry}
+\RequirePackage{nameref}
+
+
+\mode<presentation>
+
+\newif\ifbeamer@secheader
+\beamer@secheaderfalse
+
+\DeclareOptionBeamer{secheader}{\beamer@secheadertrue}
+\ProcessOptionsBeamer
+
+\usecolortheme{mun-colour}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{
+	\leavevmode%
+	\hbox{%
+		\begin{tikzpicture}[remember picture,overlay, anchor = west]
+		\node[anchor=south east] (corner) at ([xshift=16pt, yshift=-2pt]current page.south east) {\includegraphics[height=60pt]{corner}};
+		\node[anchor=south west] (logo) at ([xshift=6pt, yshift=6pt]current page.south west) {\includegraphics[width=24pt]{memorial}};
+		\end{tikzpicture}
+%		\begin{beamercolorbox}[
+%			wd=\paperwidth,
+%			ht=2.75ex,
+%			dp=.5ex,
+%			left,
+%			leftskip=8pt,
+%			rightskip=8pt
+%			]{white}%
+%			\includegraphics[width=24pt]{memorial}
+%			\hfill 
+%			\usebeamercolor[fg]{navigation symbols}\insertslidenavigationsymbol%
+%			\insertframenavigationsymbol%
+%			\insertsubsectionnavigationsymbol%
+%			\insertsectionnavigationsymbol%
+%			\insertdocnavigationsymbol%
+%			\insertbackfindforwardnavigationsymbol%
+%			\includegraphics[height=60pt]{corner}
+%		\end{beamercolorbox}%
+	}%\
+}{}
+
+\ifbeamer@secheader\else\setbeamertemplate{headline}[default]\fi
+
+\setbeamerfont*{title}{family=\sffamily, series=\normalfont, size=\Huge}
+\setbeamerfont*{subtitle}{family=\sffamily, series=\normalfont, size=\large}
+\setbeamerfont*{author}{family=\sffamily, series=\normalfont, size=\large}
+\setbeamerfont*{date}{family=\sffamily, series=\normalfont, size=\normalsize}
+
+\setbeamertemplate{section in toc}{\par$\to$~\inserttocsection}
+\setbeamertemplate{subsection in toc}{\par\hskip18pt$-$~\inserttocsubsection}
+
+
+\titlegraphic{  
+	\begin{tikzpicture}[remember picture,overlay, anchor = west]
+	%	\draw[fill=coolGrey10, coolGrey10] ([yshift=0pt]current page.south west) rectangle ([yshift=60pt]current page.south east);
+	\draw[fill=coolGrey10, coolGrey10] (current page.south west) rectangle (current page.north east);
+	%	\node[anchor=west] (logo)	at ([yshift=30pt, xshift=8pt]current page.south west) {\includegraphics[width=38pt]{memorial-knockout}};
+	\node[anchor=south east] (corner) at ([yshift=-4pt, xshift=5.5pt]current page.south east) {\includegraphics[height=60pt]{corner-knockout}};
+	\node[anchor=west] (title) at ([yshift=170pt, xshift=16pt]current page.south west) {
+		\begin{minipage}[c]{\linewidth}
+		\usebeamerfont{title}\color{white}\inserttitle\par
+		\rule[1.75pc]{0.66\linewidth}{.5pt}\par\vskip-1.5pc 
+		\usebeamerfont{author}\color{white}\insertauthor
+		\end{minipage}%
+	};
+	\node[anchor=west] (subtitle) at ([yshift=30pt, xshift=16pt]current page.south west) {
+		\begin{minipage}[c]{\linewidth}
+		\usebeamerfont{subtitle}\color{white}\insertsubtitle\par
+		\usebeamerfont{date}\color{white}\insertdate
+		\end{minipage}%
+	};
+	%	\node[anchor=north] (cover) at ([yshift=-6pt]current page.north) {\includegraphics[width=1.1\linewidth]{cover}};
+	\end{tikzpicture}}
+
+
+\setbeamertemplate{title page}{
+	\vbox{}
+	\vfill
+	\begingroup
+	\centering
+	{\usebeamercolor[fg]{titlegraphic}\inserttitlegraphic\par}
+	\vskip1em\par
+	\endgroup
+	\vfill
+} 
+
+\newcommand*{\currentname}{\@currentlabelname}%
+\addtobeamertemplate{frametitle}{%
+	\let\insertframetitle\insertsectionhead}{}%
+\addtobeamertemplate{frametitle}{%
+	\let\insertframesubtitle\insertsubsectionhead}{}%
+
+
+\def\startheads{%
+	%	\CheckCommand*\beamer@checkframetitle{\@ifnextchar\bgroup\beamer@inlineframetitle{}}%
+	\renewcommand*\beamer@checkframetitle{\global\let\beamer@frametitle\relax\@ifnextchar\bgroup\beamer@inlineframetitle{}}%
+}
+
+\mode
+<all>
