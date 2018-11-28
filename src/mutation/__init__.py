@@ -3,5 +3,4 @@
 ## Mutation module
 
 # Import module members
-from . import permutation
-
+from . import scramble
