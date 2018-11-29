@@ -27,8 +27,8 @@ DEBUG = 1
 def main() -> None:
 
     #cities = population.initialization.init_file('../data/TSP_Canada_4663.txt')
-    cities = population.initialization.init_file('../data/TSP_Uruguay_734.txt')
-    # cities = population.initialization.init_file('../data/TSP_WesternSahara_29.txt')
+    # cities = population.initialization.init_file('../data/TSP_Uruguay_734.txt')
+    cities = population.initialization.init_file('../data/TSP_WesternSahara_29.txt')
     len_cities = cities.shape[0] # Get number of rows from shape
 
     # It is faster in Python to add something to itself than to multiply by 2
@@ -93,8 +93,8 @@ def main() -> None:
         current_best_fitness = np.min(fitnesses)
         print("Current FITNESS", current_best_fitness)
         current_generation += 1
-    print("Best fitness:", fitnesses[-1])
-    print("Best route:", candidate_indices[-1])
+    print("Best fitness:", fitnesses[np.where(fitnesses == current_best_fitness)[0][0]])
+    print("Best route:", candidate_indices[np.where(fitnesses == current_best_fitness)[0][0]])
     
 
 if __name__ == '__main__':
