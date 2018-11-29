@@ -18,8 +18,12 @@
 \defcounter {refsection}{0}\relax 
 \beamer@subsectionintoc {5}{1}{The Inver-Over Crossover Operator}{16}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {6}{Mutation}{17}{0}{5}
+\beamer@sectionintoc {6}{Mutation}{21}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {6}{1}{The $\mu + \lambda $ Mutation Operator}{17}{0}{5}
+\beamer@subsectionintoc {6}{1}{The Scramble Mutation Operator}{21}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {7}{Demonstration}{18}{0}{6}
+\beamer@sectionintoc {7}{Demonstration}{27}{0}{6}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {8}{Performance}{28}{0}{7}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {9}{Any Questions?}{29}{0}{8}

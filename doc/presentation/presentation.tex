@@ -127,22 +127,37 @@
 \section{Crossover}
 \subsection{The Inver-Over Crossover Operator}
 \begin{frame}
-\begin{itemize}
-	\item<1-> 1) Creates offspring by first picking an individual (parent1) 
-	\item<2-> 2) Then it picks two loci from parent 1 that depend on another individual from the population (parent 2). 
-	\item<3-> 3) Everything between the two loci is inversed. 
-	\item<4-> 4) This process is repeated with the resulting offspring and another individual until a condition is reached.	
-\end{itemize}
+For our advanced technique, we have chosen to implement the {\em inver-over} crossover operator which functions according to the following algorithm.
+\begin{enumerate}
+	\item<1-> Pick an individual $parent_1$ and copy it to $child$
+	\item<2-> Then pick two loci from $parent_1$ that depend on another individual $parent_2$ from the population
+	\item<3-> Invert everything between these loci in $child$
+	\item<4-> Repeat this process with the resulting offspring and another individual $parent_i$ until a stopping condition is reached
+\end{enumerate}
+\onslide<5->{So {\em inver-over} is a multi-parent crossover operator.}
 \end{frame}
 
 \section{Mutation}
 \subsection{The Scramble Mutation Operator}
 \begin{frame}
-\begin{itemize}
-	\item<1-> Picks an individual and two loci to form a segment.
-	\item<2-> Shuffles all information within the selected segments.
-	\item<3-> Returns the mutated individual.
-\end{itemize}
+The scramble mutation operator, given an individual represented as a sequence of integers, typically performs the following.
+\begin{enumerate}
+	\item<1-> Picks two loci to form a segment
+	\item<2-> Randomly shuffles all information within the selected segments
+	\item<3-> Returns the mutated individual
+\end{enumerate}
+\pause
+However, we have slightly modified this operator\ldots
+\end{frame}
+
+\begin{frame}
+We have added another condition to the operator\only<1>{\ldots}\only<2->{:}\par
+\pause 
+\begin{quote}
+	Define a mutation factor $m \in (0, 1)$. Then the distance between the two chosen loci ({\em i.e.,} the size of the mutation) can be no less than $m$ multiplied by the length of the individual $n$. 
+\end{quote}
+\pause 
+In other words, we have enforced that the product $m \cdot n$ is the infimum of the possible {\em severities} of the mutation.
 \end{frame}
 
 \nohead
@@ -152,7 +167,14 @@
 {\Huge\bfseries Demonstration}
 \end{frame}
 
-\nohead
+\startheads
+\section{Performance}
+\begin{frame}
+content...
+\end{frame}
+
+
+\nohead 
 \section{Any Questions?}
 \begin{frame}
 

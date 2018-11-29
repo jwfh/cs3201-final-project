@@ -33,7 +33,7 @@ def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.nda
     
     start_idx = end_idx = 0
     while end_idx-start_idx < mutation_thresold:
-        start_idx = random.randint(0, length // 2)
+        start_idx = random.randint(0, length - 2)
         end_idx = random.randint(start_idx + 2, length - 1)
     
     np.random.shuffle(mutant[start_idx:end_idx])
