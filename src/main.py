@@ -11,6 +11,7 @@
 
 ## System imports
 import numpy as np
+import numba
 
 ## Local imports
 import crossover
@@ -47,7 +48,7 @@ def main() -> None:
 
     # So, guys, where do we go from here? Nabil comes and saves the day
     current_generation = 0
-    GENERATION_LIMIT = 100
+    GENERATION_LIMIT = 500
     improvement_threshold = 1
     # Spoof the previous min fitness so the loop starts
     previous_best_fitness = current_best_fitness + current_best_fitness

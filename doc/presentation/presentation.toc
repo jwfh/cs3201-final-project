@@ -1,29 +1,25 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {2}{The Team}{3}{0}{1}
+\beamer@sectionintoc {3}{Our Approach}{4}{0}{1}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {3}{Our Approach}{4}{0}{2}
+\beamer@subsectionintoc {3}{1}{Population Size}{4}{0}{1}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {3}{1}{Population Size}{4}{0}{2}
+\beamer@subsectionintoc {3}{2}{Mating Pool Size}{8}{0}{1}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {3}{2}{Mating Pool Size}{8}{0}{2}
+\beamer@sectionintoc {4}{Fitness Scoring}{10}{0}{2}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {4}{Fitness Scoring}{10}{0}{3}
+\beamer@subsectionintoc {4}{1}{Euclidean Distance in $\mathbb R^2$}{10}{0}{2}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {4}{1}{Euclidean Distance in $\mathbb R^2$}{10}{0}{3}
+\beamer@subsectionintoc {4}{2}{Individual Fitness}{12}{0}{2}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {4}{2}{Individual Fitness}{12}{0}{3}
+\beamer@sectionintoc {5}{Crossover}{16}{0}{3}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {5}{Crossover}{16}{0}{4}
+\beamer@subsectionintoc {5}{1}{The Inver-Over Crossover Operator}{16}{0}{3}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {5}{1}{The Inver-Over Crossover Operator}{16}{0}{4}
+\beamer@sectionintoc {6}{Mutation}{21}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {6}{Mutation}{21}{0}{5}
+\beamer@subsectionintoc {6}{1}{The Scramble Mutation Operator}{21}{0}{4}
 \defcounter {refsection}{0}\relax 
-\beamer@subsectionintoc {6}{1}{The Scramble Mutation Operator}{21}{0}{5}
+\beamer@sectionintoc {7}{Demonstration}{27}{0}{5}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {7}{Demonstration}{27}{0}{6}
-\defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {8}{Performance}{28}{0}{7}
-\defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {9}{Any Questions?}{29}{0}{8}
+\beamer@sectionintoc {8}{Any Questions?}{28}{0}{6}
