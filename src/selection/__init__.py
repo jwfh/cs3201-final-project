@@ -2,3 +2,4 @@
 
 ## Selection module
 from . import mps
+from . import survival

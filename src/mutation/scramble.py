@@ -3,7 +3,11 @@
 ## System imports 
 import numpy as np
 
+## Local imports
+from timing import timing
+
 ## Begin function mutation.scramble.scramble_swap
+# @timing
 def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.ndarray:
     '''
     Selects start and end indices in (0, i) where i is the length of the individual and the 
@@ -33,8 +37,8 @@ def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.nda
     
     start_idx = end_idx = 0
     while end_idx-start_idx < mutation_thresold:
-        start_idx = random.randint(0, length - 2)
-        end_idx = random.randint(start_idx + 2, length - 1)
+        start_idx = np.random.randint(0, length - 3)
+        end_idx = np.random.randint(start_idx + 2, length - 1)
     
     np.random.shuffle(mutant[start_idx:end_idx])
 

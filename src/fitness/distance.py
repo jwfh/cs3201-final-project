@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 ## Begin function fitness.distance.adjacent_distance
-@timing
+# @timing
 def adjacent_distance(cities: list) -> list:
     '''
     This function computes the distance between adjacent cities in a list `cities' passed to the function.

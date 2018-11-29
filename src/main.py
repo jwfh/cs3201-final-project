@@ -48,51 +48,54 @@ def main() -> None:
     # So, guys, where do we go from here? Nabil comes and saves the day
     current_generation = 0
     GENERATION_LIMIT = 100
-    improvement_threshold = 0.95
+    improvement_threshold = 1
     # Spoof the previous min fitness so the loop starts
     previous_best_fitness = current_best_fitness + current_best_fitness
-    while current_generation < GENERATION_LIMIT and \
-            current_best_fitness < improvement_threshold*previous_best_fitness:
+    while current_generation < GENERATION_LIMIT:
+        # if current_generation > 0.5*GENERATION_LIMIT and \
+        #         current_best_fitness < improvement_threshold*previous_best_fitness:
+        #     print("FITNESS broke")
+        #     break
         previous_best_fitness = current_best_fitness
+        # print("Previous FITNESS", previous_best_fitness)
 
         parents_index = selection.mps.MPS(fitnesses, MATING_POOL_SIZE)
 
         np.random.shuffle(parents_index)
         xover_rate = 0.9
-        mut_rate = 0.1
-        offspring = np.array([])
+        mut_rate = 0.05
+        offspring = []
         offspring_count = 0
-        offspring_fitness = np.array([])
-        i = 0
-        #crossover
-        while len(offspring) < MATING_POOL_SIZE:
-            if random.random() < xover_rate:
-                off1 = crossover.inver_over.inver_over(distances[parents_index[i]])
-                off2 = crossover.inver_over.inver_over(distances[parents_index[i+1]])
+        offspring_fitness = []
+        while offspring_count < MATING_POOL_SIZE:
+            #crossover
+            if np.random.random() < xover_rate:
+                a = candidate_indices[parents_index]
+                b = offspring_count
+                c = np.array(fitnesses[parents_index])
+                d = c[offspring_count]
+                off1 = crossover.inver_over.inver_over(
+                    candidate_indices[parents_index],
+                    offspring_count,
+                    cities,
+                    fitnesses[parents_index][offspring_count]
+                )
             else:
-                off1 = np.copy(distances[parents_index[i]])
-                off2 = np.copy(distances[parents_index[i+1]])
+                off1 = np.copy(candidate_indices[parents_index][offspring_count])
 
             #mutation
-            if random.random() < mut_rate:
+            if np.random.random() < mut_rate:
                 off1 = mutation.scramble.scramble_swap(off1)
-            if random.random() < mut_rate:
-                off2 = mutation.scramble.scramble_swap(off2)
-            offspring = np.append(off1, axis=0)
-            offspring_fitness = np.append(fitness.fitness.individual_fitness(off1))
-            offspring = np.append(off2, axis=0)
-            offspring_fitness = np.append(fitness.fitness.individual_fitness(off2))
-            i = i + 2
-            distances, fitnesses = selection.SurvivalSelection.mu_plus_lambda(distances, fitnesses, offspring, offspring_fitness)       
-
-   
-        """
-        while offspring_count < MATING_POOL_SIZE:
-            
-            i += 1
-        """
-
+            offspring.append(off1)
+            offspring_fitness.append(fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(cities[off1])))
+            offspring_count += 1
+        candidate_indices, fitnesses = selection.survival.mu_plus_lambda(candidate_indices, fitnesses, offspring, offspring_fitness)       
+        current_best_fitness = np.min(fitnesses)
+        print("Current FITNESS", current_best_fitness)
         current_generation += 1
+    print("Best fitness:", fitnesses[-1])
+    print("Best route:", candidate_indices[-1])
+    
 
 if __name__ == '__main__':
     # If the module is the main program, not an import, then run main()

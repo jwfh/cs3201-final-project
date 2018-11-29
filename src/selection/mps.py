@@ -26,4 +26,4 @@ def MPS(fitnesses: list, mating_pool_size: int) -> np.ndarray:
         
         i += 1
     
-    return np.array(selected_to_mate)
+    return np.asarray(selected_to_mate)
