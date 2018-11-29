@@ -127,13 +127,22 @@
 \section{Crossover}
 \subsection{The Inver-Over Crossover Operator}
 \begin{frame}
-content...
+\begin{itemize}
+	\item<1-> 1) Creates offspring by first picking an individual (parent1) 
+	\item<2-> 2) Then it picks two loci from parent 1 that depend on another individual from the population (parent 2). 
+	\item<3-> 3) Everything between the two loci is inversed. 
+	\item<4-> 4) This process is repeated with the resulting offspring and another individual until a condition is reached.	
+\end{itemize}
 \end{frame}
 
 \section{Mutation}
-\subsection{The $\mu + \lambda$ Mutation Operator}
+\subsection{The Scramble Mutation Operator}
 \begin{frame}
-content...
+\begin{itemize}
+	\item<1-> Picks an individual and two loci to form a segment.
+	\item<2-> Shuffles all information within the selected segments.
+	\item<3-> Returns the mutated individual.
+\end{itemize}
 \end{frame}
 
 \nohead
@@ -141,6 +150,13 @@ content...
 \begin{frame}
 
 {\Huge\bfseries Demonstration}
+\end{frame}
+
+\nohead
+\section{Any Questions?}
+\begin{frame}
+
+{\Huge\bfseries Any Questions?}
 \end{frame}
 
 %\startheads
