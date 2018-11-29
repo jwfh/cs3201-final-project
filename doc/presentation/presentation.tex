@@ -100,8 +100,8 @@
 	\begin{equation*}
 	I_m = \left(C_{c_m(\bar 1)}, C_{c_m(\bar 2)}, C_{c_m(\bar 3)}, \ldots, C_{c_m(\bar n)}\right),
 	\end{equation*}
-	where $c_m\colon \mathbb Z_n \to \{0, 1, 2, \ldots, n-1\}$ is a bijection between congruence classes of indices of the $n$-tuple that is $I_m$ and the indices of cities. 
-	\item<2-> For example, if $n = 7$ and $c_1$ is defined 
+	where $c_m\colon \mathbb Z_n \to \{0, 1, 2, \ldots, n-1\}$ is a bijection between congruence classes of indices of the $n$-tuple $I_m$ and the indices of cities. 
+	\item<2-> For example, if $n = 7$ and $c_1$ is defined by 
 	\begin{gather*}
 	c_1\colon \bar 0 \mapsto 4 \qquad c_1\colon \bar 1 \mapsto 6 \qquad c_1\colon \bar 2 \mapsto 2 \qquad c_1\colon 3 \mapsto 1 \\
 	c_1\colon \bar 4 \mapsto 3 \qquad c_1\colon \bar 5 \mapsto 5 \qquad c_1\colon \bar 6 \mapsto 0
@@ -119,7 +119,7 @@
 	\begin{equation*}
 	F(I_m) := \sum_{j = 0}^{n-1} \left\lVert\overrightarrow{C_{c_m(\overline{j})} C_{c_m(\overline{j+1})}}\right\rVert,
 	\end{equation*}
-	where $\left\lVert\overrightarrow{C_{c_m(\overline{j})} C_{c_m(\overline{j+1})}}\right\rVert$ is the Euclidean distance between city $C_{c_m(\overline{j})}$ and the following city, $C_{c_m(\overline{j+1})}$. 
+	where $\left\lVert\overrightarrow{C_{c_m(\overline{j})} C_{c_m(\overline{j+1})}}\right\rVert$ is the Euclidean distance between city $C_{c_m(\overline{j})}$ and the following city on route $m$, $C_{c_m(\overline{j+1})}$. 
 	\item<2-> Hence, the fittest individuals have the {\em lowest} score.
 \end{itemize}
 \end{frame}

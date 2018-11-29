@@ -9,7 +9,8 @@
 #                Hassan El-Khatib (201504396)          #
 ########################################################
 
-import random
+## System imports
+import numpy as np
 
 ## Local imports
 import crossover
@@ -31,7 +32,7 @@ def main() -> None:
     len_cities = cities.shape[0] # Get number of rows from shape
 
     # It is faster in Python to add something to itself than to multiply by 2
-    CAND_POOL_SIZE = len_cities * len_cities
+    CAND_POOL_SIZE = len_cities + len_cities
     MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
     candidate_indices = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
 
@@ -42,22 +43,28 @@ def main() -> None:
         distances.append(distance)
 
     fitnesses = fitness.fitness.overall_fitness(distances)
+    current_best_fitness = np.min(fitnesses)
 
     # So, guys, where do we go from here? Nabil comes and saves the day
     current_generation = 0
     GENERATION_LIMIT = 100
-    while current_generation < GENERATION_LIMIT:
+    improvement_threshold = 0.95
+    # Spoof the previous min fitness so the loop starts
+    previous_best_fitness = current_best_fitness + current_best_fitness
+    while current_generation < GENERATION_LIMIT and \
+            current_best_fitness < improvement_threshold*previous_best_fitness:
+        previous_best_fitness = current_best_fitness
 
         parents_index = selection.mps.MPS(fitnesses, MATING_POOL_SIZE)
 
-        random.shuffle(parents_index)
+        np.random.shuffle(parents_index)
 
         offspring = []
+        offspring_count = 0
         offspring_fitness = []
-        i = 0
         """
-        while len(offspring) < MATING_POOL_SIZE:
-
+        while offspring_count < MATING_POOL_SIZE:
+            
             i += 1
         """
 

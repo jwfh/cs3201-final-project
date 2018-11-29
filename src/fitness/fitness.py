@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from timing import timing
+import numpy as np
 
 ## Begin function fitness.fitness.overall_fitness
 @timing
@@ -14,20 +15,30 @@ def overall_fitness(cand_distances: list) -> list:
     @return A list of sums of inter-city distancs of length equal to the number of candidates.
     '''
     
-    fitnesses = sum_dist(cand_distances)
+    fitnesses = list(map(individual_fitness, cand_distances))
     
     return fitnesses
 ## End function fitness.fitness.overall_fitness
 
-## Begin function fitness.fitness.sum_dist
-def sum_dist(cand_distances: list) -> list:
+## Begin function fitness.fitness.individual_fitness
+@timing
+def individual_fitness(candidate_distance: list) -> int:
     '''
-    Computes the sum of distances for each sub-list representing each candidate solution.
+    Computes fitness for a single individual.
+    '''
 
-    @param cand_distances A two-dimensional list of lists containing each inter-city distances
-                          for each candidate solution for the TSP.
+    return _sum_dist(candidate_distance)
+## End function fitness.fitness.individual_fitness
+
+## Begin function fitness.fitness.sum_dist
+def _sum_dist(candidate_distance: list) -> int:
+    '''
+    Computes the sum of distances for a list representing a candidate solution.
+
+    @param candidate_distance A list containing each inter-city distance for a candidate solution for the TSP.
 
     @return A list of sums of inter-city distancs of length equal to the number of candidates.
     '''
-    return list(map(sum, cand_distances))
+    return np.sum(candidate_distance)
 ## End function fitness.fitness.sum_dist
+
