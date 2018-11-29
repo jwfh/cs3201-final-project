@@ -58,10 +58,34 @@ def main() -> None:
         parents_index = selection.mps.MPS(fitnesses, MATING_POOL_SIZE)
 
         np.random.shuffle(parents_index)
-
-        offspring = []
+        xover_rate = 0.9
+        mut_rate = 0.1
+        offspring = np.array([])
         offspring_count = 0
-        offspring_fitness = []
+        offspring_fitness = np.array([])
+        i = 0
+        #crossover
+        while len(offspring) < MATING_POOL_SIZE:
+            if random.random() < xover_rate:
+                off1 = crossover.inver_over.inver_over(distances[parents_index[i]])
+                off2 = crossover.inver_over.inver_over(distances[parents_index[i+1]])
+            else:
+                off1 = np.copy(distances[parents_index[i]])
+                off2 = np.copy(distances[parents_index[i+1]])
+
+            #mutation
+            if random.random() < mut_rate:
+                off1 = mutation.scramble.scramble_swap(off1)
+            if random.random() < mut_rate:
+                off2 = mutation.scramble.scramble_swap(off2)
+            offspring = np.append(off1, axis=0)
+            offspring_fitness = np.append(fitness.fitness.individual_fitness(off1))
+            offspring = np.append(off2, axis=0)
+            offspring_fitness = np.append(fitness.fitness.individual_fitness(off2))
+            i = i + 2
+            distances, fitnesses = selection.SurvivalSelection.mu_plus_lambda(distances, fitnesses, offspring, offspring_fitness)       
+
+   
         """
         while offspring_count < MATING_POOL_SIZE:
             
