@@ -31,9 +31,9 @@ def main() -> None:
     len_cities = cities.shape[0] # Get number of rows from shape
 
     # It is faster in Python to add something to itself than to multiply by 2
-    POP_SIZE = len_cities * len_cities
-    MATING_POOL_SIZE = int(POP_SIZE * 0.5)
-    candidate_indices = population.candidates.pick_cands(len_cities, POP_SIZE)
+    CAND_POOL_SIZE = len_cities * len_cities
+    MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
+    candidate_indices = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
 
     distances = []
     for city_index in candidate_indices:

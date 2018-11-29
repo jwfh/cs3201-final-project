@@ -15,13 +15,15 @@
 \DeclareOptionBeamer{secheader}{\beamer@secheadertrue}
 \ProcessOptionsBeamer
 
+\setbeamercovered{transparent}
+
 \usecolortheme{mun-colour}
 
 \setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}{
+\defbeamertemplate*{footline}{myfoot}{
 	\leavevmode%
 	\hbox{%
-		\begin{tikzpicture}[remember picture,overlay, anchor = west]
+		\begin{tikzpicture}[remember picture,overlay, anchor = center]
 		\node[anchor=south east] (corner) at ([xshift=16pt, yshift=-2pt]current page.south east) {\includegraphics[height=60pt]{corner}};
 		\node[anchor=south west] (logo) at ([xshift=6pt, yshift=6pt]current page.south west) {\includegraphics[width=24pt]{memorial}};
 		\end{tikzpicture}
@@ -45,6 +47,7 @@
 %		\end{beamercolorbox}%
 	}%\
 }{}
+\setbeamertemplate{footline}[myfoot]
 
 \ifbeamer@secheader\else\setbeamertemplate{headline}[default]\fi
 
@@ -53,8 +56,8 @@
 \setbeamerfont*{author}{family=\sffamily, series=\normalfont, size=\large}
 \setbeamerfont*{date}{family=\sffamily, series=\normalfont, size=\normalsize}
 
-\setbeamertemplate{section in toc}{\par$\to$~\inserttocsection}
-\setbeamertemplate{subsection in toc}{\par\hskip18pt$-$~\inserttocsubsection}
+\setbeamertemplate{section in toc}{\par\vskip-9pt{\color{structure}\scriptsize\raisebox{1.25pt}{\hbox{\donotcoloroutermaths$\blacktriangleright$}}}~\inserttocsection}
+\setbeamertemplate{subsection in toc}{\par\hskip18pt{\color{structure}\tiny\raisebox{1.5pt}{\hbox{\donotcoloroutermaths$\blacktriangleright$}}}~\inserttocsubsection}
 
 
 \titlegraphic{  
@@ -100,7 +103,11 @@
 
 \def\startheads{%
 	%	\CheckCommand*\beamer@checkframetitle{\@ifnextchar\bgroup\beamer@inlineframetitle{}}%
+	\let\oldhead\beamer@checkframetitle
 	\renewcommand*\beamer@checkframetitle{\global\let\beamer@frametitle\relax\@ifnextchar\bgroup\beamer@inlineframetitle{}}%
+}
+\def\nohead{%
+	\let\beamer@checkframetitle\oldhead
 }
 
 \mode

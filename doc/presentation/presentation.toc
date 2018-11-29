@@ -6,4 +6,20 @@
 \defcounter {refsection}{0}\relax 
 \beamer@subsectionintoc {3}{1}{Population Size}{4}{0}{2}
 \defcounter {refsection}{0}\relax 
-\beamer@sectionintoc {4}{References}{8}{0}{3}
+\beamer@subsectionintoc {3}{2}{Mating Pool Size}{8}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {4}{Fitness Scoring}{10}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{1}{Euclidean Distance in $\mathbb R^2$}{10}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{2}{Individual Fitness}{12}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {5}{Crossover}{16}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {5}{1}{The Inver-Over Crossover Operator}{16}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {6}{Mutation}{17}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {6}{1}{The $\mu + \lambda $ Mutation Operator}{17}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {7}{Demonstration}{18}{0}{6}
