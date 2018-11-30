@@ -19,3 +19,7 @@
 
 # Python compiled files
 *.pyc
+
+cpp/TSP/\.vs/
+
+cpp/\.vscode/
