@@ -27,7 +27,7 @@ def inver_over1(parent: list, selected_city: int) -> list:
 	return parent
 ## End function crossover.inver_over.inver_over
 @timing
-def inver_over(parent_pool: list, initial_parent_idx: int, cities: list, parent_fitness: int) -> list:
+def inver_over(parent_pool: list, initial_parent_idx: int, distances: fitness.distance.Distances, initial_parent_fitness: int) -> list:
 	child = parent_pool[initial_parent_idx]
 	not_used_cities = np.arange(0, child.shape[0])
 
@@ -53,8 +53,8 @@ def inver_over(parent_pool: list, initial_parent_idx: int, cities: list, parent_
 		child[c_idx+1:c_prime_idx] = child[c_idx+1:c_prime_idx][::-1]
 		c_idx = c_prime_idx
 		c = c_prime
-	child_fitness = fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(cities[child]))
-	if child_fitness > parent_fitness:
+	child_fitness = fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(distances, child))
+	if child_fitness > initial_parent_fitness:
 		return child
 	else:
 		return parent_pool[initial_parent_idx]

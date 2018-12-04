@@ -128,13 +128,13 @@ def adjacent_distance(distances: Distances, city_idxs: list, true_distance :bool
 
     # Helper function to map the calculation to
     def invoke_dist_calc(i: int) -> float:
-        return distances.get(city_idxs[i], city_idxs[(i+1) % num_cities])
+        return distances.get(city_idxs[i], city_idxs[(i+1) % num_cities], true_distance)
 
     # If there are less than 100 cities in the route just do it on 1 core. Otherwise thread it.
     if num_cities < 100:
         adjacent_distances = np.fromiter(map(invoke_dist_calc, range(num_cities)), dtype=np.float)
     else:
         with mpd.Pool() as pool:
-            adjacent_distances = np.fromiter(pool.map(invoke_dist_calc, range(num_cities)), dtype=np.float)
+            adjacent_distances = np.fromiter(pool.map(invoke_dist_calc, range(num_cities)), dtype=np.float, count=num_cities)
     return adjacent_distances
 ## End function fitness.distance.adjacent_distance

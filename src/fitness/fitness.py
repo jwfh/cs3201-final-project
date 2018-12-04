@@ -17,7 +17,7 @@ def bulk_fitness(cand_distances: np.ndarray) -> np.ndarray:
     '''
 
     with mpd.Pool() as pool:
-        fitnesses = np.fromiter(pool.map(individual_fitness, cand_distances), dtype=np.float64)
+        fitnesses = np.fromiter(pool.map(individual_fitness, cand_distances), dtype=np.float64, count=cand_distances.shape[0])
     
     return fitnesses
 ## End function fitness.fitness.overall_fitness
