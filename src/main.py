@@ -12,6 +12,7 @@
 ## System imports
 import numpy as np
 import numba
+import multiprocessing.dummy as mpd
 
 ## Local imports
 import crossover
@@ -34,38 +35,27 @@ def main() -> None:
     extra_large_dataset = '../data/TSP_Italy_16862.txt'
     huge_dataset = '../data/TSP_China_71009.txt'
 
+    GENERATION_LIMIT = 500
+    CAND_POOL_SIZE = 50
+    MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
+
     cities = population.initialization.init_file(tiny_dataset)
     distances = fitness.distance.Distances(cities)
     len_cities = len(distances)
     del cities
 
-    # It is faster in Python to add something to itself than to multiply by 2
-    CAND_POOL_SIZE = len_cities + len_cities
-    MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
     candidate_indices = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
 
-    cand_distances = []
-    for city_index in candidate_indices:
-        # NumPy arrays allow passing array-like object to __getitem__
-        distance = fitness.distance.adjacent_distance(cities[city_index])
-        cand_distances.append(distance)
+    with mpd.Pool() as pool:
+        cand_distances = np.fromiter(pool.map(fitness.distance.adjacent_distance, candidate_indices), dtype=np.float64)
 
-    fitnesses = fitness.fitness.overall_fitness(cand_distances)
+    fitnesses = fitness.fitness.bulk_fitness(cand_distances)
     current_best_fitness = np.min(fitnesses)
 
-    # So, guys, where do we go from here? Nabil comes and saves the day
+    # Initialization is done. Now do a few loops and call it a day.
+
     current_generation = 0
-    GENERATION_LIMIT = 500
-    improvement_threshold = 1
-    # Spoof the previous min fitness so the loop starts
-    previous_best_fitness = current_best_fitness + current_best_fitness
     while current_generation < GENERATION_LIMIT:
-        # if current_generation > 0.5*GENERATION_LIMIT and \
-        #         current_best_fitness < improvement_threshold*previous_best_fitness:
-        #     print("FITNESS broke")
-        #     break
-        previous_best_fitness = current_best_fitness
-        # print("Previous FITNESS", previous_best_fitness)
 
         parents_index = selection.mps.MPS(fitnesses, MATING_POOL_SIZE)
 
