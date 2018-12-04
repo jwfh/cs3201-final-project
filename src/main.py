@@ -27,23 +27,30 @@ DEBUG = 1
 @timing 
 def main() -> None:
 
-    #cities = population.initialization.init_file('../data/TSP_Canada_4663.txt')
-    # cities = population.initialization.init_file('../data/TSP_Uruguay_734.txt')
-    cities = population.initialization.init_file('../data/TSP_WesternSahara_29.txt')
-    len_cities = cities.shape[0] # Get number of rows from shape
+    tiny_dataset = '../data/TSP_WesternSahara_29.txt'
+    small_dataset = '../data/TSP_Qatar_194.txt'
+    medium_dataset = '../data/TSP_Uruguay_734.txt'
+    large_dataset = '../data/TSP_Canada_4663.txt'
+    extra_large_dataset = '../data/TSP_Italy_16862.txt'
+    huge_dataset = '../data/TSP_China_71009.txt'
+
+    cities = population.initialization.init_file(tiny_dataset)
+    distances = fitness.distance.Distances(cities)
+    len_cities = len(distances)
+    del cities
 
     # It is faster in Python to add something to itself than to multiply by 2
     CAND_POOL_SIZE = len_cities + len_cities
     MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
     candidate_indices = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
 
-    distances = []
+    cand_distances = []
     for city_index in candidate_indices:
         # NumPy arrays allow passing array-like object to __getitem__
         distance = fitness.distance.adjacent_distance(cities[city_index])
-        distances.append(distance)
+        cand_distances.append(distance)
 
-    fitnesses = fitness.fitness.overall_fitness(distances)
+    fitnesses = fitness.fitness.overall_fitness(cand_distances)
     current_best_fitness = np.min(fitnesses)
 
     # So, guys, where do we go from here? Nabil comes and saves the day

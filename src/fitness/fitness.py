@@ -4,7 +4,7 @@ from timing import timing
 import numpy as np
 
 ## Begin function fitness.fitness.overall_fitness
-# @timing
+@timing
 def overall_fitness(cand_distances: list) -> list:
     '''
     Computes the fitness for each candidate. Currently this just means returning a list of sums.
@@ -21,7 +21,7 @@ def overall_fitness(cand_distances: list) -> list:
 ## End function fitness.fitness.overall_fitness
 
 ## Begin function fitness.fitness.individual_fitness
-# @timing
+@timing
 def individual_fitness(candidate_distance: list) -> int:
     '''
     Computes fitness for a single individual.

@@ -7,7 +7,7 @@ import numpy as np
 from timing import timing
 
 ## Begin function mutation.scramble.scramble_swap
-# @timing
+@timing
 def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.ndarray:
     '''
     Selects start and end indices in (0, i) where i is the length of the individual and the 

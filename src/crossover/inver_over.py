@@ -26,7 +26,7 @@ def inver_over1(parent: list, selected_city: int) -> list:
 
 	return parent
 ## End function crossover.inver_over.inver_over
-# @timing
+@timing
 def inver_over(parent_pool: list, initial_parent_idx: int, cities: list, parent_fitness: int) -> list:
 	child = parent_pool[initial_parent_idx]
 	not_used_cities = np.arange(0, child.shape[0])
