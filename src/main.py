@@ -48,7 +48,7 @@ def main() -> None:
 
     # So, guys, where do we go from here? Nabil comes and saves the day
     current_generation = 0
-    GENERATION_LIMIT = 500
+    GENERATION_LIMIT = 400
     improvement_threshold = 1
     # Spoof the previous min fitness so the loop starts
     previous_best_fitness = current_best_fitness + current_best_fitness
@@ -64,7 +64,7 @@ def main() -> None:
 
         np.random.shuffle(parents_index)
         xover_rate = 0.9
-        mut_rate = 0.05
+        mut_rate = 0
         offspring = []
         offspring_count = 0
         offspring_fitness = []
