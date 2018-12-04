@@ -64,7 +64,7 @@ def main() -> None:
 
         np.random.shuffle(parents_index)
         xover_rate = 0.9
-        mut_rate = 0
+        mut_rate = 0.05
         offspring = []
         offspring_count = 0
         offspring_fitness = []
