@@ -47,7 +47,7 @@ def main() -> None:
     candidate_indices = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
 
     with mpd.Pool() as pool:
-        cand_distances = np.fromiter(pool.map(fitness.distance.adjacent_distance, candidate_indices), dtype=np.float64)
+        cand_distances = np.fromiter(pool.map(lambda candidate: fitness.distance.adjacent_distance(distances, candidate), candidate_indices), dtype=np.float64)
 
     fitnesses = fitness.fitness.bulk_fitness(cand_distances)
     current_best_fitness = np.min(fitnesses)
