@@ -2,10 +2,12 @@
 
 from timing import timing
 import numpy as np
+from numba import jit, njit
 import multiprocessing.dummy as mpd
 
 ## Begin function fitness.fitness.overall_fitness
 @timing
+@njit
 def bulk_fitness(cand_distances: np.ndarray) -> np.ndarray:
     '''
     Computes the fitness for each candidate. Currently this just means returning a list of sums.
@@ -33,6 +35,7 @@ def individual_fitness(candidate_distance: np.ndarray) -> int:
 ## End function fitness.fitness.individual_fitness
 
 ## Begin function fitness.fitness.sum_dist
+@njit
 def _sum_dist(candidate_distance: np.ndarray) -> int:
     '''
     Computes the sum of distances for a list representing a candidate solution.

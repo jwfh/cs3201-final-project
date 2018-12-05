@@ -2,10 +2,17 @@
 
 from timing import timing
 import numpy as np
-from numba import jit
+import numba
+from numba import jit, njit, jitclass, int32, float64
 import multiprocessing.dummy as mpd
 
+distance_spec = [
+    ('_cities', float64[:,:]),
+    ('_weighted_adjacency', float64[:,:])
+]
+
 ## Begin class fitness.distance.Distances
+@jitclass(distance_spec)
 class Distances:
     '''
     Singleton class used to perform distance calculations either
@@ -96,19 +103,19 @@ class Distances:
             return self._weighted_adjacency[start_idx][end_idx]
     ## End function fitness.distance.Distances.get
 
-    ## Begin function fitness.distance.Distances.__len__
-    def __len__(self) -> int:
+    ## Begin property fitness.distance.Distances.length
+    @property
+    def length(self) -> int:
         '''
         Returns the length of the object as the number of cities in self._cities.
         '''
 
         return self._cities.shape[0]
-    ## End function fitness.distance.Distances.__len__
+    ## End property fitness.distance.Distances.length
 ## End class fitness.distance.Distances
 
 ## Begin function fitness.distance.adjacent_distance
 @timing
-# @jit
 def adjacent_distance(distances: Distances, city_idxs: list, true_distance :bool=False) -> np.ndarray:
     '''
     This function computes the distance between adjacent cities in a list `cities' passed to the function.

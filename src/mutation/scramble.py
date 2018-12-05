@@ -6,9 +6,9 @@ import numpy as np
 ## Local imports
 from timing import timing
 
-## Begin function mutation.scramble.scramble_swap
+## Begin function mutation.scramble.scramble_individual
 @timing
-def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.ndarray:
+def scramble_individual(individual: np.ndarray, mutation_factor: float=0.25) -> np.ndarray:
     '''
     Selects start and end indices in (0, i) where i is the length of the individual and the 
     length of [start, end) is no less than the mutation factor multiplied by the length 
@@ -31,7 +31,7 @@ def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.nda
     @return The mutated individual.
     '''
 
-    mutant = np.copy(individual)
+    mutant = individual
     length = mutant.shape[0]
     mutation_thresold = mutation_factor * length
     
@@ -43,5 +43,5 @@ def scramble_swap(individual: np.ndarray, mutation_factor: float=0.25) -> np.nda
     np.random.shuffle(mutant[start_idx:end_idx])
 
     return mutant
-## End function mutation.scramble.scramble_swap
+## End function mutation.scramble.scramble_individual
 

@@ -6,7 +6,7 @@ import random
 from timing import timing 
 
 @timing 
-def MPS(fitnesses: list, mating_pool_size: int) -> np.ndarray:
+def mps(fitnesses: list, mating_pool_size: int) -> np.ndarray:
     
     selected_to_mate = []
     cumul_prop = []
