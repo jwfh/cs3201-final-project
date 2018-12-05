@@ -108,7 +108,7 @@ def main() -> None:
 
         np.random.shuffle(parents_idxs)
 
-        if current_generation < 0 and current_best_fitness == previous_best_fitnes:
+        if current_generation < 0 and current_best_fitness == previous_best_fitness:
             # Let's throw some randomness into this 
             mut_chooser = MUT_TYPE_FAVOR['scramble']
             mut_rate = MUT_RATE['high']
@@ -124,7 +124,7 @@ def main() -> None:
             mut_factor = MUT_FACTOR['normal']
             par_chooser = PAR_TYPE_FAVOUR['mu_lambda']
 
-        previous_best_fitnes = current_best_fitness
+        previous_best_fitness = current_best_fitness
 
         offsprings = []
         offspring_count = 0
@@ -167,13 +167,13 @@ def main() -> None:
             candidates, fitnesses = selection.survival.replacement(candidates, fitnesses, offsprings, offspring_fitnesses)
 
         current_best_fitness = np.min(fitnesses)
-        if current_best_fitness < previous_best_fitnes:
-            print('\033[1;32;40m[BETTER FITNESS]\033[1;37;40m Generation %d (squared) fitnes: %f' % (current_generation, current_best_fitness))
+        if current_best_fitness < previous_best_fitness:
+            print('\033[1;32;40m[BETTER FITNESS]\033[1;37;40m Generation %d (squared) fitness: %f' % (current_generation, current_best_fitness))
             last_change_gen = current_generation
-        elif current_best_fitness == previous_best_fitnes:
-            print(' \033[1;33;40m[EQUAL FITNESS]\033[1;37;40m Generation %d (squared) fitnes: %f' % (current_generation, current_best_fitness))
+        elif current_best_fitness == previous_best_fitness:
+            print(' \033[1;33;40m[EQUAL FITNESS]\033[1;37;40m Generation %d (squared) fitness: %f' % (current_generation, current_best_fitness))
         else:
-            print(' \033[1;31;40m[WORSE FITNESS]\033[1;37;40m Generation %d (squared) fitnes: %f' % (current_generation, current_best_fitness))
+            print(' \033[1;31;40m[WORSE FITNESS]\033[1;37;40m Generation %d (squared) fitness: %f' % (current_generation, current_best_fitness))
 
         current_generation += 1
 
