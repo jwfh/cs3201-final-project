@@ -33,19 +33,24 @@ def main_helper() -> None:
     Helper function to precompute distances and pass to main so we can run the algo 
     multiple times without precomputing over and over.
     '''
-
+    trials = 10
     tiny_dataset = '../data/TSP_WesternSahara_29.txt'
     small_dataset = '../data/TSP_Qatar_194.txt'
     medium_dataset = '../data/TSP_Uruguay_734.txt'
     large_dataset = '../data/TSP_Canada_4663.txt'
     extra_large_dataset = '../data/TSP_Italy_16862.txt'
     huge_dataset = '../data/TSP_China_71009.txt'
+
+    selected_dataset = medium_dataset
     
-    cities = population.initialization.init_file(medium_dataset)
+    print("Computing", trials, "trials for", selected_dataset)
+    
+    cities = population.initialization.init_file(selected_dataset)
     distance_obj = fitness.distance.Distances(cities)
     distance_obj.gen_all()
 
-    for trial in range(10):
+
+    for trial in range(trials):
         main(distance_obj._weighted_adjacency)
 
 @timing
