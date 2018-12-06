@@ -3,10 +3,10 @@
 from timing import timing
 import numpy as np
 from numba import jit, njit
-import multiprocessing.dummy as mpd
+import multiprocessing as mp
 
 ## Begin function fitness.fitness.overall_fitness
-@timing
+#@timing
 @njit
 def bulk_fitness(cand_distances: np.ndarray) -> np.ndarray:
     '''
@@ -18,15 +18,15 @@ def bulk_fitness(cand_distances: np.ndarray) -> np.ndarray:
     @return A list of sums of inter-city distancs of length equal to the number of candidates.
     '''
 
-    with mpd.Pool() as pool:
-        fitnesses = np.fromiter(pool.map(individual_fitness, cand_distances), dtype=np.float64, count=cand_distances.shape[0])
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        fitnesses = np.fromiter(pool.starmap(individual_fitness, cand_distances), dtype=np.float64, count=cand_distances.shape[0])
     
     return fitnesses
 ## End function fitness.fitness.overall_fitness
 
 ## Begin function fitness.fitness.individual_fitness
-@timing
-def individual_fitness(candidate_distance: np.ndarray) -> int:
+#@timing
+def individual_fitness(candidate_distance: np.ndarray) -> np.float64:
     '''
     Computes fitness for a single individual.
     '''
@@ -35,7 +35,7 @@ def individual_fitness(candidate_distance: np.ndarray) -> int:
 ## End function fitness.fitness.individual_fitness
 
 ## Begin function fitness.fitness.sum_dist
-@njit
+@jit
 def _sum_dist(candidate_distance: np.ndarray) -> int:
     '''
     Computes the sum of distances for a list representing a candidate solution.

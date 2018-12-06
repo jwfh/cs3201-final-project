@@ -4,7 +4,7 @@
 import time
 
 ## Constants
-DEBUG = False
+DEBUG = True
 
 ## Begin function timing.timing
 def timing(f):

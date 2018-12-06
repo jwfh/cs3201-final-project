@@ -12,21 +12,26 @@
 ## System imports
 import numpy as np
 from numba import jit, njit
-import multiprocessing.dummy as mpd
+import multiprocessing as mp
 
 ## Local imports
 import crossover
 import mutation
 import fitness
 import population
+import ga_helper
 import selection
+from functools import partial
 from timing import timing
 
 DEBUG = 1
 
 ## Program entry point
-@timing
-def main() -> None:
+def main_helper() -> None:
+    '''
+    Helper function to precompute distances and pass to main so we can run the algo 
+    multiple times without precomputing over and over.
+    '''
 
     tiny_dataset = '../data/TSP_WesternSahara_29.txt'
     small_dataset = '../data/TSP_Qatar_194.txt'
@@ -34,7 +39,16 @@ def main() -> None:
     large_dataset = '../data/TSP_Canada_4663.txt'
     extra_large_dataset = '../data/TSP_Italy_16862.txt'
     huge_dataset = '../data/TSP_China_71009.txt'
+    
+    cities = population.initialization.init_file(medium_dataset)
+    distance_obj = fitness.distance.Distances(cities)
+    distance_obj.gen_all()
 
+    for trial in range(10):
+        main(distance_obj._weighted_adjacency)
+
+@timing
+def main(distances: np.ndarray) -> None:
     GENERATION_LIMIT = 5000
     CAND_POOL_SIZE = 50
     MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
@@ -59,48 +73,18 @@ def main() -> None:
         'mu_lambda': 0.75
     }
 
-    cities = population.initialization.init_file(tiny_dataset)
-    distances = fitness.distance.Distances(cities)
-    len_cities = distances.length
-    del cities
+    len_cities = distances.shape[0]
 
     candidates = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
-
-    with mpd.Pool() as pool:
-        fitnesses = np.fromiter(pool.map(lambda candidate: fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(distances, candidate)), candidates), dtype=np.float, count=CAND_POOL_SIZE)
-
-    current_best_fitness = np.min(fitnesses)
-
+    candidate_distances = fitness.distance.adjacent_distance(distances, candidates, CAND_POOL_SIZE)
+    
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        fitnesses = np.fromiter(pool.map(fitness.fitness.individual_fitness, candidate_distances), dtype=np.float, count=CAND_POOL_SIZE)
+        
     # Initialization is done. Now do a few loops and call it a day.
-
+    current_best_fitness = np.min(fitnesses)
     current_generation = 0
     last_change_gen = 0
-
-    def new_offspring(offspring_count):
-        if np.random.random() < xover_rate:
-                offspring = crossover.inver_over.inver_over(
-                    candidates[parents_idxs],
-                    offspring_count,
-                    distances,
-                    fitnesses[parents_idxs][offspring_count]
-                )
-        else:
-            offspring = np.copy(candidates[parents_idxs][offspring_count])
-
-        #mutation
-        if np.random.random() < mut_rate:
-            if np.random.random() < mut_chooser:
-                offspring = mutation.scramble.scramble_individual(offspring, mut_factor)
-            else:
-                offspring = mutation.swap.swap_individual(offspring, mut_factor)
-
-        offspring_fitness = fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(distances, offspring))
-        return offspring, offspring_fitness
-
-    def append_offspring_helper(offspring, offspring_fitness):
-        offsprings.append(offspring)
-        offspring_fitnesses.append(offspring_fitness)
-
 
     while current_generation < GENERATION_LIMIT:
 
@@ -126,45 +110,35 @@ def main() -> None:
 
         previous_best_fitness = current_best_fitness
 
-        offsprings = []
-        offspring_count = 0
-        offspring_fitnesses = []
-        # while offspring_count < MATING_POOL_SIZE:
-        #     #crossover
-        #     if np.random.random() < xover_rate:
-        #         offspring = crossover.inver_over.inver_over(
-        #             candidates[parents_idxs],
-        #             offspring_count,
-        #             distances,
-        #             fitnesses[parents_idxs][offspring_count]
-        #         )
-        #     else:
-        #         offspring = np.copy(candidates[parents_idxs][offspring_count])
-
-        #     #mutation
-        #     if np.random.random() < mut_rate:
-        #         if np.random.random() < mut_chooser:
-        #             offspring = mutation.scramble.scramble_individual(offspring, mut_factor)
-        #         else:
-        #             offspring = mutation.swap.swap_individual(offspring, mut_factor)
-
-        with mpd.Pool() as pool:
-            map(lambda offspring_tuple: append_offspring_helper(*offspring_tuple), pool.map(new_offspring, range(MATING_POOL_SIZE)))
-
-        # offsprings.append(offspring)
-        # offspring_fitnesses.append(fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(distances, offspring)))
-
-            # offspring_count += 1
+        offspring_candidates, offspring_fitnesses = [], []
         
-        # offsprings = np.asarray(offsprings)
+        with mp.Pool(processes=mp.cpu_count()) as pool:
+            offspring = pool.map(partial(ga_helper.offspring.new, 
+                                         candidates=candidates, 
+                                         parents_idxs=parents_idxs, 
+                                         distances=distances, 
+                                         fitnesses=fitnesses, 
+                                         xover_rate=xover_rate, 
+                                         mut_rate=mut_rate, 
+                                         mut_factor=mut_factor, 
+                                         mut_chooser=mut_chooser
+                                        ), 
+                                 range(MATING_POOL_SIZE))
+
+        for off in offspring:
+            offspring_candidates.append(off[0])
+            offspring_fitnesses.append(off[1])
+
+        offspring_candidates = np.asarray(offspring_candidates)
+        offspring_fitnesses = np.asarray(offspring_fitnesses)
 
         # Survivor selection
         if np.random.random() < par_chooser:
             # Use Mu+Lambda
-            candidates, fitnesses = selection.survival.mu_plus_lambda(candidates, fitnesses, offsprings, offspring_fitnesses)       
+            candidates, fitnesses = selection.survival.mu_plus_lambda(candidates, fitnesses, offspring_candidates, offspring_fitnesses)       
         else:
             # Use replacement
-            candidates, fitnesses = selection.survival.replacement(candidates, fitnesses, offsprings, offspring_fitnesses)
+            candidates, fitnesses = selection.survival.replacement(candidates, fitnesses, offspring_candidates, offspring_fitnesses)
 
         current_best_fitness = np.min(fitnesses)
         if current_best_fitness < previous_best_fitness:
@@ -186,4 +160,4 @@ def main() -> None:
 
 if __name__ == '__main__':
     # If the module is the main program, not an import, then run main()
-    main()
+    main_helper()

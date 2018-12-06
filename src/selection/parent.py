@@ -5,7 +5,7 @@ import random
 
 from timing import timing 
 
-@timing 
+#@timing 
 def mps(fitnesses: list, mating_pool_size: int) -> np.ndarray:
     
     selected_to_mate = []

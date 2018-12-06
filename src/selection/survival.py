@@ -2,7 +2,7 @@ import numpy as np
 import operator
 from timing import timing
 
-@timing 
+#@timing 
 def sort_population(population, fitness):
     pop_fit_pair = list(map(list,zip(population, fitness)))
     pop_fit_pair.sort(key=operator.itemgetter(1), reverse=True)
@@ -13,7 +13,7 @@ def sort_population(population, fitness):
         sorted_fit.append(entry[1])
     return np.asarray(sorted_pop), np.asarray(sorted_fit)
 
-@timing
+#@timing
 def mu_plus_lambda(current_pop, current_fitnesses, offspring, offspring_fitnesses):
     population = []
     fitness = []
@@ -28,7 +28,7 @@ def mu_plus_lambda(current_pop, current_fitnesses, offspring, offspring_fitnesse
     return np.asarray(population), np.asarray(fitness)
 
 
-@timing
+#@timing
 def replacement(current_pop, current_fitnesses, offspring, offspring_fitnesses):
     population = []
     fitnesses = []

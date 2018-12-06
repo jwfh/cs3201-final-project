@@ -7,7 +7,7 @@ import numpy as np
 from timing import timing
 
 ## Begin function mutation.swap.swap_individual
-@timing
+#@timing
 def swap_individual(individual: np.ndarray, mutation_factor: float=0.25) -> np.ndarray:
     mutant = individual
     length = mutant.shape[0]

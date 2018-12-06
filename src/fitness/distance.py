@@ -4,7 +4,9 @@ from timing import timing
 import numpy as np
 import numba
 from numba import jit, njit, jitclass, int32, float64
-import multiprocessing.dummy as mpd
+import multiprocessing as mp
+from parallel import parallel_map
+import pathos.multiprocessing as pmp
 
 distance_spec = [
     ('_cities', float64[:,:]),
@@ -12,7 +14,7 @@ distance_spec = [
 ]
 
 ## Begin class fitness.distance.Distances
-@jitclass(distance_spec)
+#@jitclass(distance_spec)
 class Distances:
     '''
     Singleton class used to perform distance calculations either
@@ -34,7 +36,7 @@ class Distances:
     ## End function fitness.distance.Distances.__init__
 
     ## Begin function fitness.distance.Distances._add_edge
-    def _add_edge(self, start_idx, end_idx) -> None:
+    def _add_edge(self, start_idx, end_idx, start_end_dist=None) -> None:
         '''
         Adds an "edge" between two cities by populating the adjacency cell in the matrix created
         in the constructor with the [cheaply calculated] distance between the two cities. Uses 
@@ -43,10 +45,15 @@ class Distances:
         Adds the distance A -> B and B -> A.
         '''
 
-        start_end_dist =  self._distance(self._cities[start_idx], self._cities[end_idx])
+        if start_end_dist == None:
+            start_end_dist =  self._distance(self._cities[start_idx], self._cities[end_idx])
         self._weighted_adjacency[start_idx][end_idx] = start_end_dist
         self._weighted_adjacency[end_idx][start_idx] = start_end_dist
     ## Begin function fitness.distance.Distances._add_edge
+
+    def _add_edge_mapper_helper(self, start_idx, end_idx, ) -> None:
+
+        return start_idx, end_idx, self._distance(self._cities[start_idx], self._cities[end_idx])
     
     ## Begin function fitness.distance.Distances._distance
     def _distance(self, start_city: np.ndarray, end_city: np.ndarray) -> float:
@@ -69,6 +76,7 @@ class Distances:
     ## End function fitness.distance.Distances._distance
 
     ## Begin function fitness.distance.Distances.gen_all
+    @timing
     def gen_all(self) -> None:
         '''
         [Cheaply] Generates all distances between all pairs of cities.
@@ -80,43 +88,45 @@ class Distances:
         city_pairs = ((start_idx, end_idx) for start_idx in range(self._cities.shape[0]) \
                                            for end_idx in range(start_idx + 1, self._cities.shape[0]))
         # Spread this across the computer's cores
-        with mpd.Pool() as pool:
-            pool.map(lambda city_pair: self._add_edge(*city_pair), city_pairs)
+        with mp.Pool(processes=mp.cpu_count()) as pool:
+            [self._add_edge(*data_point) for data_point in pool.starmap(self._add_edge_mapper_helper, city_pairs)]
+
     ## End function fitness.distance.Distances.gen_all
 
     ## Begin function fitness.distance.Distances.get
-    def get(self, start_idx: int, end_idx: int, true_distance: bool=False) -> float:
-        '''
-        Returns the distance between two cities. Accepts two city indices as input. Optional boolean
-        parameter to return the true distance (by performing the square root) or cheap distance.
+    #def get(self, start_idx: int, end_idx: int, true_distance: bool=False) -> float:
+    #    '''
+    #    Returns the distance between two cities. Accepts two city indices as input. Optional boolean
+    #    parameter to return the true distance (by performing the square root) or cheap distance.
 
-        If start_idx is equal to end_idx then just return zero.
-        '''
+    #    If start_idx is equal to end_idx then just return zero.
+    #    '''
 
-        if start_idx == end_idx:
-            return 0.0
-        elif self._weighted_adjacency[start_idx][end_idx] == 0.0:
-            self._add_edge(start_idx, end_idx)
-        if true_distance:
-            return np.sqrt(self._weighted_adjacency[start_idx][end_idx])
-        else:
-            return self._weighted_adjacency[start_idx][end_idx]
+    #    if start_idx == end_idx:
+    #        return 0.0
+    #    elif self._weighted_adjacency[start_idx][end_idx] == 0.0:
+    #        self._add_edge(start_idx, end_idx)
+    #    if true_distance:
+    #        return np.sqrt(self._weighted_adjacency[start_idx][end_idx])
+    #    else:
+    #        return self._weighted_adjacency[start_idx][end_idx]
     ## End function fitness.distance.Distances.get
 
     ## Begin property fitness.distance.Distances.length
-    @property
-    def length(self) -> int:
-        '''
-        Returns the length of the object as the number of cities in self._cities.
-        '''
+    #@property
+    #def length(self) -> int:
+    #    '''
+    #    Returns the length of the object as the number of cities in self._cities.
+    #    '''
 
-        return self._cities.shape[0]
+    #    return self._cities.shape[0]
     ## End property fitness.distance.Distances.length
 ## End class fitness.distance.Distances
 
 ## Begin function fitness.distance.adjacent_distance
-@timing
-def adjacent_distance(distances: Distances, city_idxs: list, true_distance :bool=False) -> np.ndarray:
+#@timing
+@jit
+def adjacent_distance(distances: np.ndarray, city_idxs: np.ndarray, num_cities: int, true_distance :bool=False) -> np.ndarray:
     '''
     This function computes the distance between adjacent cities in a list `cities' passed to the function.
 
@@ -129,19 +139,29 @@ def adjacent_distance(distances: Distances, city_idxs: list, true_distance :bool
 
     @return A list of distances between adjacent cities.
     '''
+    adjacent_distances = []
+    for j in range(num_cities):
+        city_idx = city_idxs[j]
+        distance = single_cand_adjacent_distance(distances, city_idx, true_distance)
+        adjacent_distances.append(distance)
 
-    # Number of cities in the passed-in list
-    num_cities = len(city_idxs)
-
-    # Helper function to map the calculation to
-    def invoke_dist_calc(i: int) -> float:
-        return distances.get(city_idxs[i], city_idxs[(i+1) % num_cities], true_distance)
-
-    # If there are less than 100 cities in the route just do it on 1 core. Otherwise thread it.
-    if num_cities < 100:
-        adjacent_distances = np.fromiter(map(invoke_dist_calc, range(num_cities)), dtype=np.float)
-    else:
-        with mpd.Pool() as pool:
-            adjacent_distances = np.fromiter(pool.map(invoke_dist_calc, range(num_cities)), dtype=np.float, count=num_cities)
+    #return [[distances[city_idx[i]][city_idx[(i+1) % city_idx.shape[0]]] for i in range(city_idx.shape[0])] for city_idx in city_idxs]
     return adjacent_distances
 ## End function fitness.distance.adjacent_distance
+
+@njit
+def single_cand_adjacent_distance(distances: np.ndarray, city_idx: np.ndarray, true_distance: bool=False) -> np.ndarray:
+    dist = []
+    if true_distance:
+        for i in range(city_idx.shape[0]):
+            start_idx = city_idx[i]
+            end_idx = city_idx[(i+1) % city_idx.shape[0]]
+            d = distances[start_idx][end_idx] ** 0.5
+            dist.append(d)
+    else:
+        for i in range(city_idx.shape[0]):
+            start_idx = city_idx[i]
+            end_idx = city_idx[(i+1) % city_idx.shape[0]]
+            d = distances[start_idx][end_idx]
+            dist.append(d)
+    return np.array(dist)
