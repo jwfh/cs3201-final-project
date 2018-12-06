@@ -13,6 +13,7 @@
 import numpy as np
 from numba import jit, njit
 import multiprocessing as mp
+import time
 
 ## Local imports
 import crossover
@@ -88,6 +89,8 @@ def main(distances: np.ndarray) -> None:
 
     while current_generation < GENERATION_LIMIT:
 
+        start_time = time.time()
+
         parents_idxs = selection.parent.mps(fitnesses, MATING_POOL_SIZE)
 
         np.random.shuffle(parents_idxs)
@@ -141,13 +144,15 @@ def main(distances: np.ndarray) -> None:
             candidates, fitnesses = selection.survival.replacement(candidates, fitnesses, offspring_candidates, offspring_fitnesses)
 
         current_best_fitness = np.min(fitnesses)
+        elapsed_time = (time.time()-start_time)*1000.0
+
         if current_best_fitness < previous_best_fitness:
-            print('\033[1;32;40m[BETTER FITNESS]\033[1;37;40m Generation %d (squared) fitness: %f' % (current_generation, current_best_fitness))
+            print('\033[1;32;40m[BETTER FITNESS] \033[1;34;40m[%dms]\033[1;37;40m Generation %d (squared) fitness: %f' % (elapsed_time, current_generation, current_best_fitness))
             last_change_gen = current_generation
         elif current_best_fitness == previous_best_fitness:
-            print(' \033[1;33;40m[EQUAL FITNESS]\033[1;37;40m Generation %d (squared) fitness: %f' % (current_generation, current_best_fitness))
+            print(' \033[1;33;40m[EQUAL FITNESS] \033[1;34;40m[%dms]\033[1;37;40m Generation %d (squared) fitness: %f' % (elapsed_time, current_generation, current_best_fitness))
         else:
-            print(' \033[1;31;40m[WORSE FITNESS]\033[1;37;40m Generation %d (squared) fitness: %f' % (current_generation, current_best_fitness))
+            print(' \033[1;31;40m[WORSE FITNESS] \033[1;34;40m[%dms]\033[1;37;40m Generation %d (squared) fitness: %f' % (elapsed_time, current_generation, current_best_fitness))
 
         current_generation += 1
 
