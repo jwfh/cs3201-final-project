@@ -56,7 +56,7 @@ def main_helper() -> None:
 @timing
 def main(distances: np.ndarray) -> None:
     GENERATION_LIMIT = 5000
-    CAND_POOL_SIZE = 50
+    CAND_POOL_SIZE = 100
     MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
     XOVER_RATE = {
         'low':   0.50,
@@ -161,7 +161,7 @@ def main(distances: np.ndarray) -> None:
 
         current_generation += 1
 
-    tf = fitness.distance.adjacent_distance(distances, candidates[np.where(fitnesses == current_best_fitness)[0][0]], true_distance=True)
+    tf = fitness.distance.single_cand_adjacent_distance(distances, candidates[np.where(fitnesses == current_best_fitness)[0][0]], true_distance=True)
     print("\r\nLast geration with improvement:", last_change_gen)
     print("Best route:", candidates[np.where(fitnesses == current_best_fitness)[0][0]])
     print("Best fitness:", fitness.fitness.individual_fitness(tf))
