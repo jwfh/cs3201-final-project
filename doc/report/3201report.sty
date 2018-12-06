@@ -1,0 +1,113 @@
+\ProvidesPackage{3201report}
+
+\RequirePackage{sourcecodepro}
+%\RequirePackage[nf]{ebgaramond}
+\RequirePackage{geometry}
+\RequirePackage{titlesec}
+\RequirePackage{biblatex}
+\RequirePackage{verbatim}
+\RequirePackage{tikz}
+\RequirePackage{float}
+\RequirePackage{xcolor}
+\RequirePackage{hyperref, bookmark}
+\RequirePackage{amsmath, amssymb}
+
+\font\ttentt=cmtt10
+\font\tentt=cmtt12
+\hyphenchar\tentt=-1 % inhibit hyphenation in typewriter type
+\newskip\ttglue
+\tt \ttglue=.5em plus.25em minus.15em
+
+\def\edit#1{\bgroup\color{red} [#1]\egroup}
+\def\paragraph#1{\par\medskip\noindent{\scshape #1}\par}
+
+\long\def\institution#1{%
+	\long\def\@institution{{#1}}}
+\long\def\author#1{%
+	\long\def\@author{{#1}}}
+\def\course#1{%
+	\def\@course{#1}}
+
+\def\textfile#1#2{\par\bigskip\bgroup\parindent=0pt\hrulefill\,\,\fbox{#1}\,\,\hrulefill\par\begin{quote}\setstretch{1}\input{#2}\end{quote}\par\rule[1.25pc]{\linewidth}{1pt}\par\egroup}
+
+\def\eg{\bgroup\em e.g.,\egroup\ }
+\def\ie{\bgroup\em i.e.,\egroup\ }
+\def\cf{\bgroup\em c.f.,\egroup\ }
+
+\newenvironment{casescentered}
+{\let\@ifnextchar\new@ifnextchar
+	\left\lbrace
+	\def\arraystretch{1.2}%
+	\array{@{}c@{\quad}l@{}}}
+{\endarray\right.}
+
+\let\oldmaketitle\maketitle
+\def\maketitle{%
+	%	\onecolumn
+	\eject
+	\thispagestyle{empty}
+	\begin{center}
+		\vglue 12pt
+		{\large\uppercase\@institution}
+		\par\vglue 78pt
+		\parbox{.75\linewidth}{\centering\bfseries\LARGE\@title}
+		\par\vskip 18pt
+		{\bfseries\large\@course}
+		\par\vfill
+		{\Large\bfseries\@author}
+		\par\vglue 24pt
+		{\large\@date}
+		\par\vglue 42pt
+	\end{center}
+	\eject
+	%	\twocolumn
+}
+
+\let\oldappendix\appendix
+\def\appendix{%
+	%	\onecolumn
+	\oldappendix
+	\eject
+	\thispagestyle{empty}
+	\bgroup\center 
+	\vglue 0.4\textheight
+	{\LARGE Appendix}\par
+	\endcenter\egroup
+	\eject
+	%	\twocolumn
+}
+
+\def\l@section{\@dottedtocline{1}{.5em}{1.5em}}
+\def\@dotsep{4}
+\let\oldtableofcontents\tableofcontents
+\def\tableofcontents{%
+	%	\onecolumn
+	\eject
+	\oldtableofcontents
+	\eject
+	%	\twocolumn
+}
+
+% macros for verbatim scanning
+\chardef\other=12
+\def\ttverbatim{\begingroup
+	\catcode`\\=\other
+	\catcode`\{=\other
+	\catcode`\}=\other
+	\catcode`\$=\other
+	\catcode`\&=\other
+	\catcode`\#=\other
+	\catcode`\%=\other
+	\catcode`\~=\other
+	\catcode`\_=\other
+	\catcode`\^=\other
+	\obeyspaces \obeylines \tentt}
+
+\catcode`\|=\active
+{\obeylines \gdef|{\ttverbatim \spaceskip\ttglue \let^^M=\  \let|=\endgroup}}
+
+
+
+\def\paragraph#1{\par\vskip1pc\noindent{\bfseries #1}}
+
+\endinput
