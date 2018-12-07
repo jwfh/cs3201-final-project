@@ -1,1 +1,26 @@
 %% BREAK LINES EVERY 80 CHARACTERS TO HELP GIT WITH MERGING
+The inver-over operator can be regarded as either a crossover or mutation 
+operator because it takes information from other individuals in the GA's
+mating pool, yet bases a single offspring off of a single primary parent, much 
+the same way a mutation operator is unary, performing mutation on a single
+individual \cite{p44}. Throughout this report, the inver-over operator will 
+be referenced as a crossover operator as this was the inver-over 
+algorithm's place in the GA developed.
+
+\subsection{Usefulness}
+As {\em inver-over} embodies aspects of both crossover and mutation 
+operators, the operator  is designed to provide middle-ground to 
+algorithms relying primarily on crossover for variation (as this is 
+computationally expensive) and those relying on mutation for variety,
+since this is often ineffective in escaping local minima%
+\footnote{Local minima occur when the natural selection in the GA 
+	narrows the gene pool towards a ostensibly optimal solution and 
+	eliminates individuals that otherwise would evolve to become the 
+	true optimal solution.} \cite{p44}.
+
+
+\subsection{Algorithm}
+Given a pool of individuals of length $n$ represented each as a sequence
+\begin{equation*}
+I_m = \langle C_{c_m(1)}, C_{c_m(2)}, \ldots, C_{c_m(n)} \rangle,
+\end{equation*}

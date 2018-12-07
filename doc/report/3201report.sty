@@ -30,7 +30,7 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{setspace}
 \RequirePackage{url}
-\RequirePackage[colorlinks=true]{hyperref}
+\RequirePackage[colorlinks=true,allcolors=color2]{hyperref}
 %\RequirePackage{tikz}
 \RequirePackage{float}
 \RequirePackage{xcolor}
@@ -94,7 +94,7 @@ justification=RaggedRight]{caption}
 %\setlength{\bibsep}{0.0pt}
 % bibliography style defined by the specific journal style file
 
-\def\bibfont{\normalfont\sffamily\fontsize{8}{10}\selectfont}
+\def\bibfont{\normalfont\sffamily\fontsize{9}{10}\selectfont}
 \newlength{\biblabelwidth}
 \settowidth{\biblabelwidth}{\bibfont 00. }
 \makeatletter
@@ -255,7 +255,8 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 		\vskip50pt%
 		{\raggedright \titlefont \@title\par}%
 		\vskip11pt
-		{\raggedright \color{color2}\normalfont\sffamily\bfseries\scshape\fontsize{12}{14}\selectfont\@author\par}
+		{\raggedright \color{color2}\normalfont\sffamily\bfseries\scshape\fontsize{12}{14}\selectfont\@author\par}\vskip6pt%
+		{\raggedright\color{color0}\normalfont\sffamily\itshape\fontsize{8}{10}\selectfont\@institution\par}
 		\vskip11pt%
 		{\raggedright \datesfont \@dates\par}
 		\vskip1pt%
@@ -280,27 +281,27 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 %%%%%%%%%%%%%
 %% LLT: Providing the list of full refs
 % Creating a new bibliography
-\RequirePackage[resetlabels]{multibib}
-\newcites{fullrefs}{Full References}  %% Or whatever the heading might be
-\bibliographystylefullrefs{osajnl}    %% The full style
+%\RequirePackage[resetlabels]{multibib}
+%\newcites{fullrefs}{Full References}  %% Or whatever the heading might be
+%\bibliographystylefullrefs{osajnl}    %% The full style
 
 % Patching \cite to automatically add cite
 % to fullrefs list
-\RequirePackage{letltxmacro}
-\RequirePackage{xparse}
-\LetLtxMacro\oldcite\cite
-\RenewDocumentCommand{\cite}{O{} O{} m}{\oldcite[#1][#2]{#3}\nocitefullrefs{#3}}
-%% 13 Jul 2016: Patch the same for \citep and \citet
-\LetLtxMacro\oldcitep\citep
-\NewDocumentCommand{\citep}{O{} O{} m}{\oldcitep[#1][#2]{#3}\nocitefullrefs{#3}}
-\LetLtxMacro\oldcitet\citet
-\NewDocumentCommand{\citet}{O{} O{} m}{\oldcitet[#1][#2]{#3}\nocitefullrefs{#3}}
+%\RequirePackage{letltxmacro}
+%\RequirePackage{xparse}
+%\LetLtxMacro\oldcite\cite
+%\RenewDocumentCommand{\cite}{O{} O{} m}{\oldcite[#1][#2]{#3}\nocitefullrefs{#3}}
+%%% 13 Jul 2016: Patch the same for \citep and \citet
+%\LetLtxMacro\oldcitep\citep
+%\NewDocumentCommand{\citep}{O{} O{} m}{\oldcitep[#1][#2]{#3}\nocitefullrefs{#3}}
+%\LetLtxMacro\oldcitet\citet
+%\NewDocumentCommand{\citet}{O{} O{} m}{\oldcitet[#1][#2]{#3}\nocitefullrefs{#3}}
 
 % Silence the "citation multiply defined" warning
-\RequirePackage{silence}
-\WarningFilter{natbib}{Citation `}
-\WarningFilter{natbib}{There were multiply}
-\WarningFilter{caption}{Unused \captionsetup}
+%\RequirePackage{silence}
+%\WarningFilter{natbib}{Citation `}
+%\WarningFilter{natbib}{There were multiply}
+%\WarningFilter{caption}{Unused \captionsetup}
 
 % Delay certain patches/options till \begin{document} when all the booleans are set
 \RequirePackage{xpatch}
