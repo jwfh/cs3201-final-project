@@ -4,3 +4,4 @@
 
 # Import module members
 from . import scramble
+from . import swap

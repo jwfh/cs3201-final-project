@@ -11,93 +11,163 @@
 
 ## System imports
 import numpy as np
-import numba
+from numba import jit, njit
+import multiprocessing as mp
+import time
 
 ## Local imports
 import crossover
 import mutation
 import fitness
 import population
+import ga_helper
 import selection
+from functools import partial
 from timing import timing
 
 DEBUG = 1
 
 ## Program entry point
-@timing 
-def main() -> None:
+def main_helper() -> None:
+    '''
+    Helper function to precompute distances and pass to main so we can run the algo 
+    multiple times without precomputing over and over.
+    '''
+    trials = 10
+    tiny_dataset = '../data/TSP_WesternSahara_29.txt'
+    small_dataset = '../data/TSP_Qatar_194.txt'
+    medium_dataset = '../data/TSP_Uruguay_734.txt'
+    large_dataset = '../data/TSP_Canada_4663.txt'
+    extra_large_dataset = '../data/TSP_Italy_16862.txt'
+    huge_dataset = '../data/TSP_China_71009.txt'
 
-    #cities = population.initialization.init_file('../data/TSP_Canada_4663.txt')
-    # cities = population.initialization.init_file('../data/TSP_Uruguay_734.txt')
-    cities = population.initialization.init_file('../data/TSP_WesternSahara_29.txt')
-    len_cities = cities.shape[0] # Get number of rows from shape
+    selected_dataset = medium_dataset
+    
+    print("Computing", trials, "trials for", selected_dataset)
+    
+    cities = population.initialization.init_file(selected_dataset)
+    distance_obj = fitness.distance.Distances(cities)
+    distance_obj.gen_all()
 
-    # It is faster in Python to add something to itself than to multiply by 2
-    CAND_POOL_SIZE = len_cities + len_cities
+
+    for trial in range(trials):
+        main(distance_obj._weighted_adjacency)
+
+@timing
+def main(distances: np.ndarray) -> None:
+    GENERATION_LIMIT = 5000
+    CAND_POOL_SIZE = 100
     MATING_POOL_SIZE = int(CAND_POOL_SIZE * 0.5)
-    candidate_indices = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
+    XOVER_RATE = {
+        'low':   0.50,
+        'normal': 0.90
+    }
+    MUT_TYPE_FAVOR = {
+        'even':     0.50,
+        'scramble': 0.80
+    }
+    MUT_RATE = {
+        'high':   0.70,
+        'normal': 0.10
+    }
+    MUT_FACTOR = {
+        'high':   0.40,
+        'normal': 0.10
+    }
+    PAR_TYPE_FAVOUR = {
+        'replacement': 0.25,
+        'mu_lambda': 0.75
+    }
 
-    distances = []
-    for city_index in candidate_indices:
-        # NumPy arrays allow passing array-like object to __getitem__
-        distance = fitness.distance.adjacent_distance(cities[city_index])
-        distances.append(distance)
+    len_cities = distances.shape[0]
 
-    fitnesses = fitness.fitness.overall_fitness(distances)
+    candidates = population.candidates.pick_cands(len_cities, CAND_POOL_SIZE)
+    candidate_distances = fitness.distance.adjacent_distance(distances, candidates, CAND_POOL_SIZE)
+    
+    with mp.Pool(processes=mp.cpu_count()) as pool:
+        fitnesses = np.fromiter(pool.map(fitness.fitness.individual_fitness, candidate_distances), dtype=np.float, count=CAND_POOL_SIZE)
+        
+    # Initialization is done. Now do a few loops and call it a day.
     current_best_fitness = np.min(fitnesses)
-
-    # So, guys, where do we go from here? Nabil comes and saves the day
     current_generation = 0
-    GENERATION_LIMIT = 400
-    improvement_threshold = 1
-    # Spoof the previous min fitness so the loop starts
-    previous_best_fitness = current_best_fitness + current_best_fitness
+    last_change_gen = 0
+
     while current_generation < GENERATION_LIMIT:
-        # if current_generation > 0.5*GENERATION_LIMIT and \
-        #         current_best_fitness < improvement_threshold*previous_best_fitness:
-        #     print("FITNESS broke")
-        #     break
+
+        start_time = time.time()
+
+        parents_idxs = selection.parent.mps(fitnesses, MATING_POOL_SIZE)
+
+        np.random.shuffle(parents_idxs)
+
+        if current_generation < 0 and current_best_fitness == previous_best_fitness:
+            # Let's throw some randomness into this 
+            mut_chooser = MUT_TYPE_FAVOR['scramble']
+            mut_rate = MUT_RATE['high']
+            xover_rate = XOVER_RATE['low']
+            mut_factor = MUT_FACTOR['high']
+            par_chooser = PAR_TYPE_FAVOUR['replacement']
+        elif False :
+            pass 
+        else:
+            mut_chooser = MUT_TYPE_FAVOR['even']
+            mut_rate = MUT_RATE['normal']
+            xover_rate = XOVER_RATE['normal']
+            mut_factor = MUT_FACTOR['normal']
+            par_chooser = PAR_TYPE_FAVOUR['mu_lambda']
+
         previous_best_fitness = current_best_fitness
-        # print("Previous FITNESS", previous_best_fitness)
 
-        parents_index = selection.mps.MPS(fitnesses, MATING_POOL_SIZE)
+        offspring_candidates, offspring_fitnesses = [], []
+        
+        with mp.Pool(processes=mp.cpu_count()) as pool:
+            offspring = pool.map(partial(ga_helper.offspring.new, 
+                                         candidates=candidates, 
+                                         parents_idxs=parents_idxs, 
+                                         distances=distances, 
+                                         fitnesses=fitnesses, 
+                                         xover_rate=xover_rate, 
+                                         mut_rate=mut_rate, 
+                                         mut_factor=mut_factor, 
+                                         mut_chooser=mut_chooser
+                                        ), 
+                                 range(MATING_POOL_SIZE))
 
-        np.random.shuffle(parents_index)
-        xover_rate = 0.9
-        mut_rate = 0.05
-        offspring = []
-        offspring_count = 0
-        offspring_fitness = []
-        while offspring_count < MATING_POOL_SIZE:
-            #crossover
-            if np.random.random() < xover_rate:
-                a = candidate_indices[parents_index]
-                b = offspring_count
-                c = np.array(fitnesses[parents_index])
-                d = c[offspring_count]
-                off1 = crossover.inver_over.inver_over(
-                    candidate_indices[parents_index],
-                    offspring_count,
-                    cities,
-                    fitnesses[parents_index][offspring_count]
-                )
-            else:
-                off1 = np.copy(candidate_indices[parents_index][offspring_count])
+        for off in offspring:
+            offspring_candidates.append(off[0])
+            offspring_fitnesses.append(off[1])
 
-            #mutation
-            if np.random.random() < mut_rate:
-                off1 = mutation.scramble.scramble_swap(off1)
-            offspring.append(off1)
-            offspring_fitness.append(fitness.fitness.individual_fitness(fitness.distance.adjacent_distance(cities[off1])))
-            offspring_count += 1
-        candidate_indices, fitnesses = selection.survival.mu_plus_lambda(candidate_indices, fitnesses, offspring, offspring_fitness)       
+        offspring_candidates = np.asarray(offspring_candidates)
+        offspring_fitnesses = np.asarray(offspring_fitnesses)
+
+        # Survivor selection
+        if np.random.random() < par_chooser:
+            # Use Mu+Lambda
+            candidates, fitnesses = selection.survival.mu_plus_lambda(candidates, fitnesses, offspring_candidates, offspring_fitnesses)       
+        else:
+            # Use replacement
+            candidates, fitnesses = selection.survival.replacement(candidates, fitnesses, offspring_candidates, offspring_fitnesses)
+
         current_best_fitness = np.min(fitnesses)
-        print("Current FITNESS", current_best_fitness)
+        elapsed_time = (time.time()-start_time)*1000.0
+
+        if current_best_fitness < previous_best_fitness:
+            print('\033[1;32;40m[BETTER FITNESS] \033[1;34;40m[%dms]\033[1;37;40m Generation %d (squared) fitness: %f' % (elapsed_time, current_generation, current_best_fitness))
+            last_change_gen = current_generation
+        elif current_best_fitness == previous_best_fitness:
+            print(' \033[1;33;40m[EQUAL FITNESS] \033[1;34;40m[%dms]\033[1;37;40m Generation %d (squared) fitness: %f' % (elapsed_time, current_generation, current_best_fitness))
+        else:
+            print(' \033[1;31;40m[WORSE FITNESS] \033[1;34;40m[%dms]\033[1;37;40m Generation %d (squared) fitness: %f' % (elapsed_time, current_generation, current_best_fitness))
+
         current_generation += 1
-    print("Best fitness:", fitnesses[np.where(fitnesses == current_best_fitness)[0][0]])
-    print("Best route:", candidate_indices[np.where(fitnesses == current_best_fitness)[0][0]])
+
+    tf = fitness.distance.single_cand_adjacent_distance(distances, candidates[np.where(fitnesses == current_best_fitness)[0][0]], true_distance=True)
+    print("\r\nLast geration with improvement:", last_change_gen)
+    print("Best route:", candidates[np.where(fitnesses == current_best_fitness)[0][0]])
+    print("Best fitness:", fitness.fitness.individual_fitness(tf))
+
     
 
 if __name__ == '__main__':
     # If the module is the main program, not an import, then run main()
-    main()
+    main_helper()
