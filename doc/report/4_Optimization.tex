@@ -1,1 +1,17 @@
 %% BREAK LINES EVERY 80 CHARACTERS TO HELP GIT WITH MERGING
+Before any benchmarking was done, an effort was made to use the 
+NumPy \cite{numpy} module's interfaces as much as possible over raw 
+Python data types. For example, when possible |numpy.ndarray| was 
+chosen over Python's |list| data structure. The SciPy\footnote{NumPy is
+part of the SciPy Stack.} documentation states:
+\begin{quote}
+	 \ldots the fact that [Python |list|s] can contain objects of differing 
+	 types mean that Python must store type information for every 
+	 element, and must execute type dispatching code when operating 
+	 on each element. This also means that very few list operations can 
+	 be carried out by efficient C loops --- each iteration would require 
+	 type checks and other Python API bookkeeping. \cite{scipy_docs}
+\end{quote}
+As the problem being solved requires extensive accessing and mutating
+of arrays containing a single data type (\ie real numbers), NumPy 
+provided a very easily-implemented speed boost.
