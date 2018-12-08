@@ -5,8 +5,6 @@ import numpy as np
 import numba
 from numba import jit, njit, jitclass, int32, float64
 import multiprocessing as mp
-from parallel import parallel_map
-import pathos.multiprocessing as pmp
 
 distance_spec = [
     ('_cities', float64[:,:]),
