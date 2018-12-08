@@ -18,3 +18,6 @@
 
 # Python compiled files
 *.pyc
+
+*.xmpi
+doc/report/0_Report\.pdf

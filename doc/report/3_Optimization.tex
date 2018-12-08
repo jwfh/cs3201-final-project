@@ -76,8 +76,12 @@ when necessary, each with their own lock that does not interfere with the
 other processes. Unfortunately, this meant a large amount of code needed
 to be restructured to ensure that all functions and the data passed to them
 could be pickled. Implementation was done using the |Pool| class and the
-|Process| class from Python's |multiprocessing| module.
-
+|Process| class from Python's |multiprocessing| module. A caveat of this 
+is that separate |multiprocessing| processes cannot share memory without
+a shared data structure \cite{wang}. As NumPy arrays were the preferred data
+structure, several functions needed to be refactored to return the result
+of a computation (which then is inserted in some data structure in the main 
+program) rather than modifying the data structure within the function.
 
 
 % Mention memory speed bottleneck
