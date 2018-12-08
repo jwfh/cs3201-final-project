@@ -17,7 +17,7 @@ As the problem being solved requires extensive accessing and mutating
 of arrays containing a single data type (\ie real numbers), NumPy 
 provided a very easily-implemented speed boost.
 
-\subsection{Cheaply Computing Distance}
+\subsection{Cheaply Computing Distance}\label{ssec:cheap}
 Suppose that the distance between cities $C_j$ and $C_{j+1}$ is not less
  than $1$ and the same applies for cities $C_k$ and $C_{k+1}$. That is, 
 \begin{align*}
@@ -83,10 +83,42 @@ structure, several functions needed to be refactored to return the result
 of a computation (which then is inserted in some data structure in the main 
 program) rather than modifying the data structure within the function.
 
+These changes shortened execution of the algorithm for the Uruguay dataset
+from nearly 5.5 hours to less than 1.5 hours on a computer with a quad-core
+processor. Monitoring of Windows' |taskmgr.exe| and Unix's |htop| programs
+revealed that CPU utilization, while spread evenly among processor cores,
+still was not consistently near 100\%, as one may expect. 
 
-% Mention memory speed bottleneck
+Attempting program execution on several different computers and servers 
+led to the conclusion that the limiting factor at this point was not the CPU 
+but rather the speed of the RAM in the computer\footnote{Due to the size of
+the data being stored in memory, CPU L1, L2, and L3 caches (see
+Appendix~\ref{sec:comp-specs}) were all too small to store the entire 
+data structure; hence it needed to be stored in RAM.}. 
+
+We also remark that nodes with less cores at higher speeds
+(\ie |en2048ece04.engr.mun.ca|, which has a quad-core 3.2GHz processor) 
+fared much better than nodes with many cores at slightly lower speeds (\ie 
+|reliant.cs.mun.ca|, which has two dual-threaded quad-core processors 
+each clocking 2.67GHz).
+
+\subsection{Pre-computing All Distances}\label{ssec:precomputing}
+Initially, distance between cities $C_j$ and $C_{j+1}$ was computed each time 
+it was needed to score the fitness of an individual. Even with the `cheap' 
+computation described in sub-section~\ref{ssec:cheap}, this resulted in
+significant needless computation as some values inevitably would be 
+computed more than once. To avoid duplicate calculations, there were two
+possible approaches to take:
+\begin{enumerate}[label={(\roman*)}]
+	\item Develop a data structure to compute distances as needed and 
+	store the values for future reference
+	\item Pre-compute all distances
+\end{enumerate}
+The first approach avoids the cost of pre-computing distances that are 
+never used by using a just-in-time approach and then storing the computed
+value. A major drawback of this is that is nullifies any advantage of 
+multiprocessing since this approach computes small sets of distances 
+very sporadically instead of all of the distances at one time.
 
 
-
-\subsection{Precomputing All Distances}\label{ssec:precomputing}
 
