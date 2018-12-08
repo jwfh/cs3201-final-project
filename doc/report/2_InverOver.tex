@@ -42,9 +42,9 @@ where
 \begin{equation*}
 \left\lVert \overrightarrow{C_j \, C_{j+1}} \right\rVert = \sqrt{(x_{C_{j+1}} - x_{C_j})^2 + (y_{C_{j+1}} - y_{C_j})^2}
 \end{equation*}
-is the Eucliean distance between cities $C_j$ and $C_{j+1}$\footnote{
+is the Eucliean distance between cities $C_j$ and $C_{j+1}$.\footnote{
 	Take indices $j$ modulo $n$ so when $j=n-1$, $(n-1)+1  \equiv 0 \pmod n$
-	 and we compute the distance from the last city back to the first.}. 
+	 and we compute the distance from the last city back to the first.}
 
 \subsection{Algorithm}
 The algorithm (Algorithm~\ref{alg:inver-over}) used mirrors that 
@@ -92,7 +92,7 @@ depicted in the article by Tao and Michalewicz \cite{p44}.
 
 Here $M[i]$ is the primary parent from which the child is based. 
 One can observe that all changes are then made to this individual, 
-like a mutation, yet they involve other individuals, denoted $newPar$
+like a mutation, yet they involve other individuals, denoted $newPar$,
  in the mating pool.
 
 We borrow the following example of a single iteration of the algorithm 
@@ -105,14 +105,15 @@ from Tao and Michalewicz.
 		 $\rand\{x \in \mathbb R \mid 0 \leqslant x < 1\}$
 		 does not exceed $p$. Another city index $c'$ from the child is 
 		 selected, say $c' = 6$ so $child[c'] = 8$. The section of $child$ 
-		 after indices $c$ and $c'$ is inverted, leaving 
-		 $child = \langle 2, 3, 8, 5, 1, 4, 6, 7 \rangle$.
+		 after indices $c$ and $c'$ (\ie $\langle 9, 4, 1, 5, 8 \rangle$) is 
+		 inverted, leaving $child = \langle 2, 3, 8, 5, 1, 4, 9, 6, 7 \rangle$.
 		\item Otherwise, another individual is (randomly) selected from the
 		mating pool to become the new parent. Let this be 
 		$\langle 1, 6, 4, 3, 5, 7, 9, 2, 8 \rangle$. Here the city next to 
 		$child[c] = 3$ is city $5$. So, the segment of $child$ to invert is 
-		that which starts after city 3 and terminates after city 5. This 
-		leaves $child = \langle 2, 3, 5, 1, 4, 9, 6, 7\rangle$.
+		that which starts after city 3 and terminates after city 5 
+		(\ie $\langle 9, 4, 1, 5 \rangle$). This 
+		leaves $child = \langle 2, 3, 5, 1, 4, 9, 8, 6, 7\rangle$.
 	\end{enumerate}
 \end{enumerate}
 As in Tao and Michalewicz, we remark that in either case the resulting 
@@ -128,7 +129,7 @@ and $c = 2$ so $child[c] = 6$.
 		randomly chosen individual in the mating pool $M$. Let this 
 		city be city $8$. As $8$ follows $6$ in $child$, the algorithm 
 		terminates.
-		\item Otherwise, a randomly selected city is selected. This may 
+		\item Otherwise, a randomly selected city is chosen. This may 
 		also be $8$, in which case the algorithm also terminates. If it is 
 		not $8$, the algorithm continues as described in (2).
 	\end{enumerate}

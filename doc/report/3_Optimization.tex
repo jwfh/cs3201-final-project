@@ -2,7 +2,7 @@
 \subsection{The NumPy Module}
 Before any benchmarking was done, an effort was made to use the 
 NumPy \cite{numpy} module's interfaces as much as possible over raw 
-Python data types. For example, when possible |numpy.ndarray| was 
+Python data types. For example, when possible, |numpy.ndarray| was 
 chosen over Python's |list| data structure. The SciPy\footnote{NumPy is
 part of the SciPy Stack.} documentation states:
 \begin{quote}
@@ -35,13 +35,16 @@ if, and only if,
 $\left\lVert \overrightarrow{C_j\, C_{j+1}} \right\rVert^2 < \left\lVert \overrightarrow{C_j\, C_{j+1}} \right\rVert^2$.
 Hence, by adding an |assert| statement to our code to ensure that 
 \begin{equation*}
-(x_{C_{j+1}} - x_{C_j})^2 + (y_{C_{j+1}} - y_{C_j})^2 \geqslant 1
+(x_{C_{j+1}} - x_{C_j})^2 + (y_{C_{j+1}} - y_{C_j})^2 \geqslant 1,
 \end{equation*}
 we can omit the expensive square root operation $\frac{1}{2}(n^2 + n)$ 
-times and still maintain accurate distance comparisons and fitness scores. 
+times\footnote{If distances are computed only once (see
+sub-section~\ref{ssec:precomputing}). Otherwise the number of expensive
+calculations may be higher.} and still maintain accurate distance 
+comparisons and fitness scores. 
 
-After the final iteration of the GA, the true distance is calculated using
-\eqref{eq:fit1}.
+After the final iteration of the GA, the true distance must still be calculated
+using \eqref{eq:fit1}.
 
 \subsection{Maximizing Hardware Utilization}
 At the time of writing, nearly all modern computers utilize multiple processor
@@ -53,8 +56,11 @@ underutilized.
 
 Immediately, multi-threaded processing using Python's 
 |multiprocessing.dummy| module was investigated to take full 
-advantage of the computer's hardware. Initially, this resulted in {\em worse}
-performance. Unfortunately, as QuantStart explains,
+advantage of the computer's hardware. Multithreading was chosen over
+multiprocessing as this does not impose the requirement that functions 
+be serializable (referred to by the term {\em pickleable} in Python). This 
+allows local helper functions and lambda expressions to be used.
+This resulted in {\em worse} performance because, as QuantStart explains,
 \begin{quote}
 	...the Python interpreter is not thread safe. This means that there is a
 	globally enforced lock when trying to safely access Python objects from 
@@ -65,11 +71,18 @@ performance. Unfortunately, as QuantStart explains,
 	no gain in performance when using the Threading library\ldots
 	\cite{quantstart}
 \end{quote}
+Instead, multi{\em processing} was used to create several Python instances
+when necessary, each with their own lock that does not interfere with the
+other processes. Unfortunately, this meant a large amount of code needed
+to be restructured to ensure that all functions and the data passed to them
+could be pickled. Implementation was done using the |Pool| class and the
+|Process| class from Python's |multiprocessing| module.
+
 
 
 % Mention memory speed bottleneck
 
 
 
-\subsection{Precomputing All Distances}
+\subsection{Precomputing All Distances}\label{ssec:precomputing}
 

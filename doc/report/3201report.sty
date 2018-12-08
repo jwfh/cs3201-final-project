@@ -172,7 +172,7 @@ justification=RaggedRight]{caption}
 
 % Section/subsection/paragraph set-up
 \RequirePackage[explicit]{titlesec}
-\renewcommand{\thesubsection}{\Alph{subsection}}
+%\renewcommand{\thesubsection}{\Alph{subsection}}
 
 \titleformat{\section}
 {\large\sffamily\bfseries}
@@ -347,6 +347,8 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 	%% Ignore \bibliographyfullrefs if not submitting to Optics Letters
 	\pretocmd{\bibliographyfullrefs}{\clearpage}{}{}
 }
+
+\setcounter{secnumdepth}{3} % default value for 'report' class is "2"
 
 \def\edit#1{\bgroup\color{red} [#1]\egroup}
 
