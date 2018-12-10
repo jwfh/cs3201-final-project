@@ -102,7 +102,12 @@ chosen so as to minimize the risk of elitist selection emerging in our
 algorithm (\ie selecting only the fittest candidates), which leads to a 
 high chance of the algorithm peaking at a local minima extremely early.
 
-\edit{Need to discuss inver-over's place here.}
+Inver-over is then introduced as the crossover operator, which in addition 
+to the mutation operators, changes the offspring of the parent candidates 
+selected by the multi-pointer selection (MPS) operator. This operation prevents
+ the GA from plateauing at a local minima, while promoting the exploration 
+aspect of the algorithm by inverting a random segment at the crossover phase, 
+based on the parents chosen to breed.
 
 Initial implementations of the algorithm used scramble as a mutation operator
 and $\mu + \lambda$ survival selection. Preliminary tests showed that the 
