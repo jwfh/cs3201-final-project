@@ -163,7 +163,7 @@
 \if@draft
 \RequirePackage[left=48pt,%
 right=42pt,%
-top=46pt,%
+top=60pt,%
 bottom=60pt,%
 headheight=15pt,%
 headsep=10pt,%
@@ -171,7 +171,7 @@ letterpaper,twoside,showframe]{geometry}%
 \else 
 \RequirePackage[left=48pt,%
 right=42pt,%
-top=46pt,%
+top=60pt,%
 bottom=60pt,%
 headheight=15pt,%
 headsep=10pt,%
@@ -354,12 +354,12 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 % Custom title page
 \renewcommand{\@maketitle}{%
 	{\vphantom{M}%
-		\vskip50pt%
+		\vskip36pt%
 		{\raggedright \titlefont \@title\par}%
-		\vskip11pt
+		\vskip8pt
 		{\raggedright \color{color2}\normalfont\sffamily\bfseries\scshape\fontsize{12}{14}\selectfont\@author\par}\vskip6pt%
 		{\raggedright\color{color0}\normalfont\sffamily\itshape\fontsize{8}{10}\selectfont\@institution\par}
-		\vskip11pt%
+		\vskip8pt%
 		{\raggedright \datesfont \@dates\par}
 		\vskip1pt%
 		\ifthenelse{\boolean{shortarticle}}
@@ -371,7 +371,7 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 			{%
 				\abscontentformatted
 			}%
-			\vskip25pt%
+			\vskip20pt%
 		}%
 	}%
 }%
