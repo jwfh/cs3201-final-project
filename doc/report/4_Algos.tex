@@ -1,1 +1,99 @@
 %% BREAK LINES EVERY 80 CHARACTERS TO HELP GIT WITH MERGING
+\subsection{Program Entry and Preprocessing}
+The program entry point is in |main.py|; other local modules used in the 
+algorithm are contained in the following directory structure.
+\bgroup
+\footnotesize
+\itemsep=-1ex
+\setlength{\columnsep}{-24pt}
+\begin{multicols}{2}
+\raggedbottom
+\begin{itemize}[topsep=-12pt,leftmargin=22pt]
+	\item[\file] |main.py|
+	\item[\folder] |crossover/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+		\item[\file] |inver_over.py|
+	\end{itemize}
+	\item[\folder] |fitness/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+		\item[\file] |distance.py|
+		\item[\file] |fitness.py|
+	\end{itemize}
+	\item[\folder] |ga_helper/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+		\item[\file] |offspring.py|
+	\end{itemize}
+	\item[\folder] |timing/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+	\end{itemize}
+	\vfill\null
+	\columnbreak
+	\item[\folder] |mutation/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+		\item[\file] |scramble.py|
+		\item[\file] |swap.py|
+	\end{itemize}
+	\item[\folder] |population/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+		\item[\file] |candidates.py|
+		\item[\file] |initialization.py|
+	\end{itemize}
+	\item[\folder] |selection/|
+	\begin{itemize}[topsep=-1ex,leftmargin=12pt,itemsep=-.5ex]
+		\item[\file] |__init__.py|
+		\item[\file] |parent.py|
+		\item[\file] |survival.py|
+	\end{itemize}
+\end{itemize}
+\end{multicols}
+\egroup
+
+Initialization is done in |main.py| through a call to |initialization.init_file()| in 
+the |population| module, which takes a path to a file and returns a 
+|numpy.ndarray| object containing the $x$- and $y$-coordinates of the 
+cities in the data file.
+
+{\small\lstinputlisting[style=pycode]{include/snippets/init_file.py}}
+
+The array returned from this function is then passed to the |Distances()| 
+class constructor in the |fitness.distance| module and the |gen_all()| 
+method is called on this object to generate all $\frac{1}{2}(n^2-n)$
+distances.
+{\small\lstinputlisting[style=pycode]{include/snippets/gen_all.py}}
+The |_weighted_adjacency| instance variable of the object is then passed 
+to the main function; this way |main()| can run multiple times without reloading 
+and recomputing the same data.
+
+\subsection{GA Initialization}
+Immediately in |main()|, variables such as generation limit $G$, candidate pool size $CP$, 
+mating pool size $MP$, and so on are defined. 
+
+Candidates are then chosen by choosing $CP$ enumerations from the set of 
+permutations of $\{0, 1, \ldots, n-1\}$, where $n$ is the number of cities.
+Following this part of the algorithm's initialization, the |adjacent_distance()| function
+is invoked on for the population. This function calls |single_cand_adjacent_distance|,
+{\small\lstinputlisting[style=pycode]{include/snippets/sing_dist.py}}
+\noindent which uses the adjacency matrix constructed in preprocessing to form an array of
+pairwise distances between each adjacent set of cities in the individual.
+
+\subsection{GA Operators}
+Initial implementations of the algorithm used inver-over as a crossover 
+operator, scramble as a mutation operator, and $\mu + \lambda$ survival 
+selection. Preliminary tests showed that the randomness introduced by 
+the swap mutation could be harmful to a fit individual more often than it 
+was beneficial.  
+
+Instead, a system was developed that considers the previous two generations'
+top fitnesses when deciding which operator(s) to use for the next generation.
+This is done by comparing variables |current_best_fitness| and 
+|previous_best_fitness|; if optimal generational fitness is not improving
+then introduce more randomness, otherwise maintain moderate randomness.
+
+\subsection{title}
+

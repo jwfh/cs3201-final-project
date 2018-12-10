@@ -37,7 +37,7 @@ Hence, by adding an |assert| statement to our code to ensure that
 \begin{equation*}
 (x_{C_{j+1}} - x_{C_j})^2 + (y_{C_{j+1}} - y_{C_j})^2 \geqslant 1,
 \end{equation*}
-we can omit the expensive square root operation $\frac{1}{2}(n^2 + n)$ 
+we can omit the expensive square root operation $\frac{1}{2}(n^2 - n)$ 
 times\footnote{If distances are computed only once (see
 sub-section~\ref{ssec:precomputing}). Otherwise the number of expensive
 calculations may be higher.} and still maintain accurate distance 
@@ -105,7 +105,7 @@ each clocking 2.67GHz).
 \subsection{Pre-computing All Distances}\label{ssec:precomputing}
 Initially, distance between cities $C_j$ and $C_{j+1}$ was computed each time 
 it was needed to score the fitness of an individual. Even with the `cheap' 
-computation described in sub-section~\ref{ssec:cheap}, this resulted in
+computation technique described in sub-section~\ref{ssec:cheap}, this resulted in
 significant needless computation as some values inevitably would be 
 computed more than once. To avoid duplicate calculations, there were two
 possible approaches to take:
@@ -118,7 +118,5 @@ The first approach avoids the cost of pre-computing distances that are
 never used by using a just-in-time approach and then storing the computed
 value. A major drawback of this is that is nullifies any advantage of 
 multiprocessing since this approach computes small sets of distances 
-very sporadically instead of all of the distances at one time.
-
-
-
+very sporadically instead of all of the distances at one time. For this 
+reason, the second option was chosen.

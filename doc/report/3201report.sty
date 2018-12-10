@@ -1,10 +1,12 @@
 \ProvidesPackage{3201report}
 
-\newif\ifpdfx\pdfxfalse
-\DeclareOption{x-1a}{\pdfxtrue}
-\DeclareOption{a-1b}{\pdfxfalse}
+\newif\if@pdfx\@pdfxfalse
+\DeclareOption{x-1a}{\@pdfxtrue}
+\DeclareOption{a-1b}{\@pdfxfalse}
 \DeclareOption{print}{\ExecuteOptions{x-1a}}
 \DeclareOption{digital}{\ExecuteOptions{a-1b}}
+\newif\if@draft\@draftfalse
+\DeclareOption{draft}{\@drafttrue}
 \ProcessOptions\relax
 
 % Verbatim type shortcut
@@ -27,7 +29,6 @@
 \catcode`\|=\active
 {\obeylines \gdef|{\ttverbatim \spaceskip\ttglue \let^^M=\  \let|=\endgroup}}
 
-
 % Fonts and language
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[english]{babel}
@@ -38,7 +39,8 @@
 \RequirePackage{setspace}
 \RequirePackage{url}
 \RequirePackage[colorlinks=true,allcolors=color2]{hyperref}
-\ifpdfx
+\RequirePackage{verbatim}
+\if@pdfx
 \RequirePackage[x-1a]{pdfx}
 \else 
 \RequirePackage[a-1b]{pdfx}
@@ -47,6 +49,77 @@
 \RequirePackage{float}
 \RequirePackage{xcolor}
 \RequirePackage{bookmark}
+\RequirePackage{multicol}
+\RequirePackage{listings}
+
+% Code snippets
+\lstnewenvironment{codeBox}[1]
+{
+	% Beginning code
+	\lstset{
+		language={#1},
+		numbers=left,
+		numbersep=2mm,
+		numberstyle=\sffamily\scriptsize\color{black},
+		stepnumber=1,
+		tabsize=3,
+		breakatwhitespace=false,
+		breaklines=true,
+		captionpos=b,
+		showstringspaces=false,
+		breaklines=true,
+		prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+		basicstyle=\color{black}\ttfamily,
+		commentstyle=\color{LimeGreen}\itshape,
+		keywordstyle=\color{BurntOrange}\bfseries,
+		stringstyle=\color{WildStrawberry},
+		keywords={return, /, *, def, (, )},
+		linewidth=0.7\linewidth,
+		frame=single,
+		framesep=0mm,
+		xleftmargin=2\parindent,
+		xrightmargin=3.5cm,
+		leftmargin=4mm,
+		framesep=0mm,
+		framerule=0mm,
+		abovecaptionskip=3mm,
+		%		aboveskip=-9pt,
+		belowskip=3pt
+	}
+}
+{
+	% Ending code
+}
+\lstdefinestyle{pycode}{
+	name=pycode,
+	%		language=Python,
+	basicstyle=\fontsize{9.5}{9}\selectfont\ttfamily\SetTracking{encoding=*}{-75}\lsstyle,
+	columns=fullflexible,
+	numbers=left,
+	breakatwhitespace=true,
+	numberfirstline=1,
+	firstnumber=auto,
+	numberstyle=\scriptsize,
+	numbersep=5pt,
+	xleftmargin=\parindent,
+	breaklines=true,
+	prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+	breakindent=12pt,
+	aboveskip=0.5 \baselineskip,
+	belowskip=0.5 \baselineskip,
+	firstnumber=last,
+}
+
+\lstnewenvironment{pycode}[1][]{%
+	\lstset{
+		style=pycode,
+		#1
+	}
+	%	\csname\@lst @SetFirstNumber\endcsname
+}{%
+	%	\csname \@lst @SaveFirstNumber\endcsname
+}
+
 
 % Math hacks
 \DeclareMathOperator{\card}{card}
@@ -87,6 +160,15 @@
 \RequirePackage{algorithm}
 \RequirePackage[noend]{algpseudocode}
 \RequirePackage{changepage}
+\if@draft
+\RequirePackage[left=48pt,%
+right=42pt,%
+top=46pt,%
+bottom=60pt,%
+headheight=15pt,%
+headsep=10pt,%
+letterpaper,twoside,showframe]{geometry}%
+\else 
 \RequirePackage[left=48pt,%
 right=42pt,%
 top=46pt,%
@@ -94,6 +176,7 @@ bottom=60pt,%
 headheight=15pt,%
 headsep=10pt,%
 letterpaper,twoside]{geometry}%
+\fi 
 \RequirePackage[labelfont={bf,sf},%
 labelsep=period,%
 figurename=Fig.,%
@@ -386,6 +469,13 @@ THE ABSTRACT\vskip12pt}\let\go\relax\fi
 %	\eject
 %	%	\twocolumn
 %}
+
+\newcommand{\folder}[1][.8\ht\strutbox]{%
+	\includegraphics[height=#1]{include/folder}%
+}
+\newcommand{\file}[1][.8\ht\strutbox]{%
+\includegraphics[height=#1]{include/file}%
+}
 
 %% End of package
 \RequirePackage{microtype}
