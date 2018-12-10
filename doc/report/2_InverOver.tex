@@ -44,7 +44,8 @@ where
 \end{equation*}
 is the Eucliean distance between cities $C_j$ and $C_{j+1}$.\footnote{
 	Take indices $j$ modulo $n$ so when $j=n-1$, $(n-1)+1  \equiv 0 \pmod n$
-	 and we compute the distance from the last city back to the first.}
+	 and we compute the distance from the last city back to the first.} Hence
+a lower fitness score is better.
 
 \subsection{Algorithm}
 The algorithm (Algorithm~\ref{alg:inver-over}) used mirrors that 
