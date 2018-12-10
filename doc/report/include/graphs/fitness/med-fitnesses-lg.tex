@@ -1,0 +1,49 @@
+% !TeX TS-program = lualatex
+\documentclass{standalone}
+\usepackage{tikz, pgfplots}
+\begin{document}
+	\begin{tikzpicture}
+	\begin{axis}[
+%	title = {Picture 1},  % whatever name you want
+	xlabel = {Generation Count},
+	ylabel = {Best Fitness (Cheaply Computed)},
+	xmin=0,
+	xmax=5000,
+	% only scale the axis, not the axis including the ticks and labels
+	scale only axis=true,
+	% set `width' and `height' to the desired values
+	width=5in,
+	height=4in]
+	\addplot[red, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-1.txt};
+	\addplot[green, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-2.txt};
+	\addplot[blue, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-3.txt};
+	\addplot[cyan, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-4.txt};
+	\addplot[magenta, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-5.txt};
+	\addplot[yellow, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-6.txt};
+	\addplot[black, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-7.txt};
+	\addplot[teal, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-8.txt};
+	\addplot[brown, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-9.txt};
+	\addplot[violet, mark=none] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-log-10.txt};
+	\addplot[red, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-1.txt};
+	\addplot[green, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-2.txt};
+	\addplot[blue, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-3.txt};
+	\addplot[cyan, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-4.txt};
+	\addplot[magenta, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-5.txt};
+	\addplot[yellow, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-6.txt};
+	\addplot[black, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-7.txt};
+	\addplot[teal, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-8.txt};
+	\addplot[brown, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-9.txt};
+	\addplot[violet, dashed, mark=none] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-log-10.txt};
+	\addplot[red, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-1.txt};
+	\addplot[green, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-2.txt};
+	\addplot[blue, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-3.txt};
+	\addplot[cyan, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-4.txt};
+	\addplot[magenta, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-5.txt};
+	\addplot[yellow, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-6.txt};
+	\addplot[black, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-7.txt};
+	\addplot[teal, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-8.txt};
+	\addplot[brown, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-9.txt};
+	\addplot[violet, dotted, mark=none] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-log-10.txt};
+	\end{axis}
+	\end{tikzpicture}
+\end{document}
