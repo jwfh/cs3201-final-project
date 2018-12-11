@@ -63,25 +63,27 @@ allows local helper functions and lambda expressions to be used.
 This resulted in {\em worse} performance because, as QuantStart explains,
 \begin{quote}
 	...the Python interpreter is not thread safe. This means that there is a
-	globally enforced lock when trying to safely access Python objects from 
-	within threads. At any one time only a single thread can acquire a lock 
-	for a Python object or C API. The interpreter will reacquire this lock for 
-	every 100 bytecodes of Python instructions and around (potentially) 
-	blocking I/O operations. Because of this lock CPU-bound code will see 
-	no gain in performance when using the Threading library\ldots
+	globally enforced lock [Global Interpreter Lock] when trying to safely 
+	access Python objects from within threads. At any one time only a single
+	thread can acquire a lock for a Python object or C API. The interpreter 
+	will reacquire this lock for every 100 bytecodes of Python instructions
+	and around (potentially) blocking I/O operations. Because of this lock 
+	CPU-bound code will see no gain in performance when using the Threading 
+	library\ldots
 	\cite{quantstart}
 \end{quote}
 Instead, multi{\em processing} was used to create several Python instances
-when necessary, each with their own lock that does not interfere with the
-other processes. Unfortunately, this meant a large amount of code needed
-to be restructured to ensure that all functions and the data passed to them
-could be pickled. Implementation was done using the |Pool| class and the
-|Process| class from Python's |multiprocessing| module. A caveat of this 
-is that separate |multiprocessing| processes cannot share memory without
-a shared data structure \cite{wang}. As NumPy arrays were the preferred data
-structure, several functions needed to be refactored to return the result
-of a computation (which then is inserted in some data structure in the main 
-program) rather than modifying the data structure within the function.
+when necessary, each with their own lock (and dedicated thread) that does 
+not interfere with the other processes. Unfortunately, this meant a large
+amount of code needed to be restructured to ensure that all functions and 
+the data passed to them could be pickled. Implementation was done using 
+the |Pool| class and the |Process| class from Python's |multiprocessing| 
+module. A caveat of this is that separate |multiprocessing| processes cannot 
+share memory without a shared data structure \cite{wang}. As NumPy arrays
+were the preferred data structure, several functions needed to be refactored 
+to return the result of a computation (which then is inserted in some data 
+structure in the main program) rather than modifying the data structure 
+within the function.
 
 These changes shortened execution of the algorithm for the Uruguay dataset
 from nearly 5.5 hours to less than 1.5 hours on a computer with a quad-core
@@ -94,7 +96,8 @@ led to the conclusion that the limiting factor at this point was not the CPU
 but rather the speed of the RAM in the computer\footnote{Due to the size of
 the data being stored in memory, CPU L1, L2, and L3 caches (see
 Appendix~\ref{sec:comp-specs}) were all too small to store the entire 
-data structure; hence it needed to be stored in RAM.}. 
+data structure; hence it needed to be stored in RAM, and thus limited
+by the operating frequency of the RAM.}. 
 
 We also remark that nodes with less cores at higher speeds
 (\ie |en2048ece04.engr.mun.ca|, which has a quad-core 3.2GHz processor) 
