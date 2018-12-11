@@ -122,7 +122,25 @@ then introduce more randomness, otherwise maintain moderate randomness.
 
 Varied amounts of randomness were selected by adding swap mutation --- 
 which simply swaps two cities on the tour --- instead 
-of just scramble. In such cases where generational fitness was not improving, 
+of just scramble.
+
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}{\linewidth}
+		\centering 
+		\fbox{\includegraphics[width=0.9\linewidth]{include/graphs/mutation/scramble}}
+		\caption{Scramble Mutation\label{fig:scramble}}
+	\end{subfigure}
+	\par\vskip12pt
+	\begin{subfigure}{\linewidth}
+		\centering 
+		\fbox{\includegraphics[width=0.9\linewidth]{include/graphs/mutation/swap}}
+		\caption{Swap Mutation\label{fig:swap}}
+	\end{subfigure}
+	\caption{Two Types of Mutation Implemented}
+\end{figure}
+
+In such cases where generational fitness was not improving, 
 scramble mutation was favoured $4:1$, the mutation rate was increased, crossover
 rate was decreased $1:2$, severity of mutation\footnote{See
 sub-sub-section~\ref{sssec:severity}.}
