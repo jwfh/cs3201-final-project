@@ -7,3 +7,15 @@ for our mutation operators; both initialized in such a way that
 our GA would accordingly increase or decrease the chances of 
 either happening, should it detect that our solutions were 
 getting stuck at a local minima with each subsequent generation.
+According to the graphs illustrated in the results section, 
+it can be concluded that using the GA techniques discussed 
+throughout the report causes the population of candidate 
+solutions to plateau quicker in smaller datasets. 
+Furthermore, due to the large number of generations, 
+the algorithm was able to properly explore and exploit 
+its population in order to reach the best possible fitness.
+For our algorithm to run as effectively and efficiently, 
+several optimization methods had to be implemented, 
+from the implementation of NumPy arrays and multi-threaded processing, 
+to cheaply computing the distance for each candidate in each 
+generation and precomputing them all at once.
