@@ -121,9 +121,8 @@ This is done by comparing variables |current_best_fitness| and
 then introduce more randomness, otherwise maintain moderate randomness.
 
 Varied amounts of randomness were selected by adding swap mutation --- 
-which simply swaps two cities on the tour --- instead 
+which simply swaps two cities on the tour, depicted in Figure~\ref{fig:swap} --- instead 
 of just scramble.
-
 \begin{figure}[h]
 	\centering
 	\begin{subfigure}{\linewidth}
@@ -139,9 +138,8 @@ of just scramble.
 	\end{subfigure}
 	\caption{Two Types of Mutation Implemented}
 \end{figure}
-
 In such cases where generational fitness was not improving, 
-scramble mutation was favoured $4:1$, the mutation rate was increased, crossover
+scramble mutation (Figure~\ref{fig:scramble}) was favoured $4:1$, the mutation rate was increased, crossover
 rate was decreased $1:2$, severity of mutation\footnote{See
 sub-sub-section~\ref{sssec:severity}.}
 was increased fourfold, and survivor selection was done favouring the 
