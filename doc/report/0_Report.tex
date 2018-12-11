@@ -1,0 +1,48 @@
+\documentclass[12pt, twocolumn]{article}
+
+\usepackage{biblatex}
+\bibliography{\jobname}
+
+%\usepackage[print]{3201report}
+\usepackage{3201report}
+\setboolean{shortarticle}{true}
+
+
+\title{GAs To Solve The Travelling Salesman Problem}
+\def\journalname{GAs To Solve The Travelling Salesman Problem}
+\author{Jacob House, Nabil Miri, Omar Mohamed, and Hassan El-Khatib}
+\dates{Compiled~\today\hfill\break Submitted~December~10,~2018}
+\institution{Memorial University of Newfoundland, Faculty of Science, Department of Computer Science} 
+\course{Computer Science 3201}
+
+\begin{abstract}
+	This report investigates the {\em Travelling Salesman Problem} through 
+	the use of a genetic algorithm (GA) employing the {\em inver-over} 
+	crossover operator, a combination of scramble and swap mutations, 
+	and a combination of $\mu + \lambda$ and replacement survival 
+	selection operators.
+\end{abstract}
+
+
+\begin{document}
+	\maketitle
+	\section{Problem Specifications}
+	\input{1_TSPSpecs}
+	\section{The Inver-Over Operator}
+	\input{2_InverOver}
+	\section{Optimization}\label{sec:optimizations}
+	\input{3_Optimization}
+	\section{Algorithm \& Implementation}
+	\input{4_Algos}
+	\section{Results}
+	\input{5_Results}
+	\section{Conclusion}
+	\input{6_Conclusion}
+	\newpage
+	\printbibliography
+	\appendix
+	\section{Source Code}
+	\input{A_Source}
+	\section{Computer Specifications}
+	\input{B_Specs}\label{sec:comp-specs}
+\end{document}

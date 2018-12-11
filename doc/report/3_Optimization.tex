@@ -1,0 +1,125 @@
+%% BREAK LINES EVERY 80 CHARACTERS TO HELP GIT WITH MERGING
+\subsection{The NumPy Module}
+Before any benchmarking was done, an effort was made to use the 
+NumPy \cite{numpy} module's interfaces as much as possible over raw 
+Python data types. For example, when possible, |numpy.ndarray| was 
+chosen over Python's |list| data structure. The SciPy\footnote{NumPy is
+part of the SciPy Stack.} documentation states:
+\begin{quote}
+	 \ldots the fact that [Python |list|s] can contain objects of differing 
+	 types mean that Python must store type information for every 
+	 element, and must execute type dispatching code when operating 
+	 on each element. This also means that very few list operations can 
+	 be carried out by efficient C loops --- each iteration would require 
+	 type checks and other Python API bookkeeping. \cite{scipy_docs}
+\end{quote}
+As the problem being solved requires extensive accessing and mutating
+of arrays containing a single data type (\ie real numbers), NumPy 
+provided a very easily-implemented speed boost.
+
+\subsection{Cheaply Computing Distance}\label{ssec:cheap}
+Suppose that the distance between cities $C_j$ and $C_{j+1}$ is not less
+ than $1$ and the same applies for cities $C_k$ and $C_{k+1}$. That is, 
+\begin{align*}
+\textstyle 1 &\leqslant \left\lVert \overrightarrow{C_j \, C_{j+1}} \right\rVert \\
+&= \sqrt{(x_{C_{j+1}} - x_{C_j})^2 + (y_{C_{j+1}} - y_{C_j})^2}
+\end{align*}
+and
+\begin{align*}
+\textstyle 1 &\leqslant \left\lVert \overrightarrow{C_k\, C_{k+1}} \right\rVert \\
+&= \sqrt{(x_{C_{k+1}} - x_{C_k})^2 + (y_{C_{k+1}} - y_{C_k})^2}
+\end{align*}
+Then 
+$\left\lVert \overrightarrow{C_j\, C_{j+1}} \right\rVert < \left\lVert \overrightarrow{C_k\, C_{k+1}} \right\rVert$ 
+if, and only if, 
+$\left\lVert \overrightarrow{C_j\, C_{j+1}} \right\rVert^2 < \left\lVert \overrightarrow{C_j\, C_{j+1}} \right\rVert^2$.
+Hence, by adding an |assert| statement to our code to ensure that 
+\begin{equation*}
+(x_{C_{j+1}} - x_{C_j})^2 + (y_{C_{j+1}} - y_{C_j})^2 \geqslant 1\text{,}
+\end{equation*}
+we can omit the expensive square root operation $\frac{1}{2}(n^2 - n)$ 
+times\footnote{If distances are computed only once (see
+sub-section~\ref{ssec:precomputing}). Otherwise the number of expensive
+calculations may be higher.} and still maintain accurate distance 
+comparisons and fitness scores. 
+
+After the final iteration of the GA, the true distance must still be calculated
+using \eqref{eq:fit1}.
+
+\subsection{Maximizing Hardware Utilization}\label{ssec:hardware}
+At the time of writing, nearly all modern computers utilize multiple processor
+cores (or in some cases multiple processors, each with multiple cores) to 
+accomplish tasks\footnote{Specifications of several of Memorial's LabNet 
+computers used for computation are included in Appendix~\ref{sec:comp-specs}.}.
+Natively, the Python language uses only {\em one} core, leaving the rest 
+underutilized. 
+
+Immediately, multi-threaded processing using Python's 
+|multiprocessing.dummy| module was investigated to take full 
+advantage of the computer's hardware. Multithreading was chosen over
+multiprocessing as this does not impose the requirement that functions 
+be serializable (referred to by the term {\em pickleable} in Python). This 
+allows local helper functions and lambda expressions to be used.
+This resulted in {\em worse} performance because, as QuantStart explains,
+\begin{quote}
+	...the Python interpreter is not thread safe. This means that there is a
+	globally enforced lock [Global Interpreter Lock] when trying to safely 
+	access Python objects from within threads. At any one time only a single
+	thread can acquire a lock for a Python object or C API. The interpreter 
+	will reacquire this lock for every 100 bytecodes of Python instructions
+	and around (potentially) blocking I/O operations. Because of this lock 
+	CPU-bound code will see no gain in performance when using the Threading 
+	library\ldots
+	\cite{quantstart}
+\end{quote}
+Instead, multi{\em processing} was used to create several Python instances
+when necessary, each with their own lock (and dedicated thread) that does 
+not interfere with the other processes. Unfortunately, this meant a large
+amount of code needed to be restructured to ensure that all functions and 
+the data passed to them could be pickled. Implementation was done using 
+the |Pool| class and the |Process| class from Python's |multiprocessing| 
+module. A caveat of this is that separate |multiprocessing| processes cannot 
+share memory without a shared data structure \cite{wang}. As NumPy arrays
+were the preferred data structure, several functions needed to be refactored 
+to return the result of a computation (which then is inserted in some data 
+structure in the main program) rather than modifying the data structure 
+within the function.
+
+These changes shortened execution of the algorithm for the Uruguay dataset
+from nearly 5.5 hours to less than 1.5 hours on a computer with a quad-core
+processor. Monitoring of Windows' |taskmgr.exe| and Unix's |htop| programs
+revealed that CPU utilization, while spread evenly among processor cores,
+still was not consistently near 100\%, as one may expect. 
+
+Attempting program execution on several different computers and servers 
+led to the conclusion that the limiting factor at this point was not the CPU 
+but rather the speed of the RAM in the computer\footnote{Due to the size of
+the data being stored in memory, CPU L1, L2, and L3 caches (see
+Appendix~\ref{sec:comp-specs}) were all too small to store the entire 
+data structure; hence it needed to be stored in RAM, and thus limited
+by the operating frequency of the RAM.}. 
+
+We also remark that nodes with less cores at higher speeds
+(\ie |en2048ece04.engr.mun.ca|, which has a quad-core 3.2GHz processor) 
+fared much better than nodes with many cores at slightly lower speeds (\ie 
+|reliant.cs.mun.ca|, which has two dual-threaded quad-core processors 
+each clocking 2.67GHz).
+
+\subsection{Pre-computing All Distances}\label{ssec:precomputing}
+Initially, distance between cities $C_j$ and $C_{j+1}$ was computed each time 
+it was needed to score the fitness of an individual. Even with the `cheap' 
+computation technique described in sub-section~\ref{ssec:cheap}, this resulted in
+significant needless computation as some values inevitably would be 
+computed more than once. To avoid duplicate calculations, there were two
+possible approaches to take:
+\begin{enumerate}[label={(\roman*)}]
+	\item Develop a data structure to compute distances as needed and 
+	store the values for future reference
+	\item Pre-compute all distances
+\end{enumerate}
+The first approach avoids the cost of pre-computing distances that are 
+never used by using a just-in-time approach and then storing the computed
+value. A major drawback of this is that is nullifies any advantage of 
+multiprocessing since this approach computes small sets of distances 
+very sporadically instead of all of the distances at one time. For this 
+reason, the second option was chosen.

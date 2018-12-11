@@ -1,0 +1,71 @@
+%% BREAK LINES EVERY 80 CHARACTERS TO HELP GIT WITH MERGING
+\raggedbottom
+As discussed in Section~\ref{ssec:hardware}, hardware limitations of the
+computers used for algorithm execution were something that needed
+to be considered and worked with in this project. Therefore, to 
+facilitate an accurate and comprehensive report, hardware specifications
+for all terminals used are included in this section. 
+
+
+\subsection{Hosts Used}
+A number of hosts belonging to Memorial's LabNet network were used to
+run the GA developed for this report. These hosts are listed below.
+
+\begin{verbatim}
+   devastator.cs.mun.ca
+   en2048ece03.engr.mun.ca
+   en2048ece04.engr.mun.ca
+   en2048ece05.engr.mun.ca
+   en2048ece07.engr.mun.ca
+   en2048ece12.engr.mun.ca
+   laserbeak.cs.mun.ca
+   overkill.cs.mun.ca
+   pounce.cs.mun.ca
+   starscream.cs.mun.ca
+\end{verbatim}
+Several other nodes were tested and not used due to lesser hardware 
+capabilities.
+\begin{verbatim}
+   excalibur.cs.mun.ca
+   excelsior.cs.mun.ca
+   intrepid.cs.mun.ca
+   reliant.cs.mun.ca
+   valiant.cs.mun.ca
+\end{verbatim}
+
+\subsection{Processor Speed}
+Specifications of the processor(s) in all nodes used for testing are 
+included in Table~\ref{tab:cpu} on page~\pageref{tab:cpu}. 
+\begin{table*}[ht]
+	\centering\small
+	\def\arraystretch{1.1}
+	\begin{tabular}{lccccccc} \hline 
+		\multirow{2}{*}{\bf Hostname} & \multirow{2}{*}{\bf Sockets} & \multirow{2}{*}{\parbox{1.75cm}{\centering\bf Cores per\\Socket}} & \multirow{2}{*}{\parbox{2cm}{\centering\bf Threads per Core}} & \multirow{2}{*}{\parbox{1.75cm}{\centering\bf CPU max.\\MHz}} & \multicolumn{3}{c}{\bf Cache}  \\ \cline{6-8}
+		& & & & & {\bf L1} & {\bf L2} & {\bf L3} \\ \hline 
+		|devastator| & 1 & 4 & 1 & 3800 & 32K & 256K & 6144K \\
+		|en2048ece03| & 1 & 4 & 1 & 3600 & 32K & 256K & 6144K \\
+		|en2048ece04| & 1 & 4 & 1 & 3600 & 32K & 256K & 6144K \\
+		|en2048ece05| & 1 & 4 & 2 & 4000 & 32K & 256K & 8192K \\
+		|en2048ece07| & 1 & 4 & 2 & 4000 & 32K & 256K & 8192K \\
+		|en2048ece12| & 1 & 4 & 2 & 4000 & 32K & 256K & 8192K \\
+		|excalibur| & 2 & 4 & 2 & 2668 & 32K & 256K & 8192K \\
+		|excelsior| & 2 & 4 & 2 & 2668 & 32K & 256K & 8192K \\
+		|laserbeak| & 1 & 4 & 1 & 3800 & 32K & 256K & 6144K \\
+		|intrepid| & 2 & 4 & 2 & 2668 & 32K & 256K & 8192K \\
+		|overkill| & 1 & 4 & 1 & 3800 & 32K & 256K & 6144K \\
+		|pounce| & 1 & 4 & 1 & 3800 & 32K & 256K & 6144K \\
+		|reliant| & 2 & 4 & 2 & 2668 & 32K & 256K & 8192K \\
+		|starscream| & 1 & 4 & 1 & 3800 & 32K & 256K & 6144K \\ 
+		|valiant| & 2 & 4 & 2 & 2668 & 32K & 256K & 8192K \\ \hline
+	\end{tabular}
+	\caption{Computer CPU Specifications\label{tab:cpu}}
+\end{table*}
+
+\subsection{Memory Specifications}
+Due to conjecture made in Section~\ref{ssec:hardware} that one of the
+limiting factors of the program execution time was random access 
+memory (RAM) speed, an effort was made to retrieve these specifications
+for the report. Unfortunately, due to system restrictions placed on 
+LabNet computers, standard users do not have |sudo| privileges.
+As a result, access to the |dmidecode| and |lshw| commands
+needed to read information about system hardware is restricted.

@@ -1,0 +1,25 @@
+% !TeX TS-program = lualatex
+\documentclass{standalone}
+\usepackage{tikz, pgfplots}
+\begin{document}
+	\begin{tikzpicture}
+	\begin{axis}[
+%	log basis y={2},
+%	ymode = log,
+%	title = {Picture 1},  % whatever name you want
+	xlabel = {GA Trial},
+	ylabel = {Overall Best Fitness},
+	% only scale the axis, not the axis including the ticks and labels
+	scale only axis=true,
+	% set `width' and `height' to the desired values
+	xmin=0,
+	xmax=31,
+	width=3in,
+	height=2in]
+	\addplot[only marks] table {../../../../../logs/out/medium-set-en2048ece04.engr.mun.ca-10-1-fitnesses-out.txt};
+	\addplot[ only marks] table {../../../../../logs/out/medium-set-en2048ece07.engr.mun.ca-10-2-fitnesses-out.txt};
+	\addplot[only marks] table {../../../../../logs/out/medium-set-en2048ece12.engr.mun.ca-10-1-fitnesses-out.txt};
+%	\addplot[red, domain=0:30] {79114};
+	\end{axis}
+	\end{tikzpicture}
+\end{document}

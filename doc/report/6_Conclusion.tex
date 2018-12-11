@@ -1,0 +1,27 @@
+%% BREAK LINES EVERY 80 CHARACTERS TO HELP GIT WITH MERGING
+Results gathered from execution of the algorithm with the Western Sahara
+dataset demonstrate the developed algorithm's efficacy in solving
+the TSP. One improvement that the results from the Western Sahara
+dataset indicate is a need for more effective local minima escaping 
+techniques. Table~\ref{tab:last-gen-tiny} shows that in some cases
+a high number of generations was required to achieve a near-optimal 
+fitness, however Figure~\ref{fig:tiny-fitnesses} demonstrates a severe
+plateau of best generational fitness around $500$ generations.
+
+A more effective technique to escape local minima would reduce the 
+number of generations with no improvement while still striving for 
+near-optimal solutions.
+
+While not as optimal, the results from the Uruguay dataset
+do make sense and provide more useful information of where improvements
+to the algorithm could be made. Extrapolation from 
+Figure~\ref{fig:med-fitnesses} indicates that running more generations would likely 
+result in a plateau of the best generational fitness much nearer the true
+optimal solution. However, as execution for all datasets was done with
+a constant population and mating pool size while the number of 
+possible individuals grew at a rate of $n!$ for $n$ cities, future 
+tests should be done with population and mating pool sizes that are not 
+kept constant, but rather increase with the tour length. This would allow 
+more variety in the population and hence could promote more diverse 
+offspring, capable of escaping local minima faster and without 
+reliance on severe mutation for randomness.

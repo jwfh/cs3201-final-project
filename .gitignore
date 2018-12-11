@@ -3,7 +3,6 @@
 *.aux
 *.log
 *.bbl
-*.bib
 *.bcf
 *.blg
 *.fdb_latexmk
@@ -14,8 +13,11 @@
 # LaTeX compiled files
 #*.pdf 
 *.ps
-#*.dvi
+*.dvi
 
 
 # Python compiled files
 *.pyc
+
+*.xmpi
+doc/report/0_Report\.pdf

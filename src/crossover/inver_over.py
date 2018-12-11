@@ -54,7 +54,7 @@ def inver_over(parent_pool: list, initial_parent_idx: int, distances: np.ndarray
 		c_idx = c_prime_idx
 		c = c_prime
 	child_fitness = fitness.fitness.individual_fitness(fitness.distance.single_cand_adjacent_distance(distances, child))
-	if child_fitness > initial_parent_fitness:
+	if child_fitness >= initial_parent_fitness:
 		return child
 	else:
 		return parent_pool[initial_parent_idx]
